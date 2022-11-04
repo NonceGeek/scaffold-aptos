@@ -1,0 +1,64 @@
+import { useState } from "react";
+import { useRouter } from "next/router";
+import {
+  DAPP_ADDRESS,
+  MARKET_COINT_TYPE,
+  DAPP_NAME,
+} from "../config/constants";
+import { TokenCard } from "../components/TokenCard";
+import { Token } from "../types";
+import { useWallet } from "@manahippo/aptos-wallet-adapter";
+
+export default function MakeOffer() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const { creator, name, collection, uri, description } = router.query;
+  const { signAndSubmitTransaction } = useWallet();
+  const [price, updatePrice] = useState("");
+
+  async function makeOffer() {
+    setLoading(true);
+    const payload = {
+      type: "entry_function_payload",
+      function: `${DAPP_ADDRESS}::marketplace::list_token`,
+      type_arguments: [MARKET_COINT_TYPE],
+      arguments: [
+        DAPP_ADDRESS,
+        DAPP_NAME,
+        creator,
+        collection,
+        name,
+        "0",
+        price,
+      ],
+    };
+    await signAndSubmitTransaction(payload, { gas_unit_price: 100 });
+    setLoading(false);
+    router.push("/");
+  }
+
+  return (
+    <div className="flex flex-col justify-center items-center">
+      <div className="w-1/5 my-8">
+        <TokenCard data={{ name, collection, uri, description } as Token} />
+      </div>
+      <div className="w-1/4 flex flex-col pb-12">
+        <input
+          type="number"
+          placeholder="Asset Price in APT"
+          className="mt-2 p-4 input input-bordered input-primary w-full"
+          onChange={(e) => updatePrice(e.target.value)}
+        />
+        <button
+          onClick={makeOffer}
+          className={
+            (loading ? "loading " : "") +
+            "btn btn-primary font-bold mt-4 text-white rounded p-4 shadow-lg"
+          }
+        >
+          List NFT
+        </button>
+      </div>
+    </div>
+  );
+}
