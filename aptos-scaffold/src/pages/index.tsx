@@ -12,7 +12,8 @@ import {
   WalletClient,
   HexString,
 } from "@martiandao/aptos-web3-bip44.js";
-
+// import { TypeTagVector } from "@martiandao/aptos-web3-bip44.js/dist/aptos_types";
+// import {TypeTagParser} from "@martiandao/aptos-web3-bip44.js/dist/transaction_builder/builder_utils";
 export default function Home() {
 
   const { account, signAndSubmitTransaction } = useWallet();
@@ -84,15 +85,17 @@ export default function Home() {
 
   function add_addr() {
     const { description, resource_path, addr_type, addr, addr_description, chains } = formInput;
+    let addr_handled = addr.replace('0x', '');
     return {
       type: "entry_function_payload",
       function: DAPP_ADDRESS + "::addr_aggregator::add_addr",
       type_arguments: [],
       arguments: [
         addr_type,
-        addr,
+        addr_handled,
+        chains,
         addr_description,
-        chains
+
       ],
     };
   }
@@ -183,7 +186,7 @@ export default function Home() {
           placeholder="Chains"
           className="mt-8 p-4 input input-bordered input-primary w-full"
           onChange={(e) =>
-            updateFormInput({ ...formInput, chains: ["Ethereum"] })
+            updateFormInput({ ...formInput, chains: JSON.parse(e.target.value) })
           }
         />
         <br></br>
