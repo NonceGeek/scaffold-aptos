@@ -85,14 +85,13 @@ export default function Home() {
 
   function add_addr() {
     const { description, resource_path, addr_type, addr, addr_description, chains } = formInput;
-    let addr_handled = addr.replace('0x', '');
     return {
       type: "entry_function_payload",
       function: DAPP_ADDRESS + "::addr_aggregator::add_addr",
       type_arguments: [],
       arguments: [
         addr_type,
-        addr_handled,
+        addr,
         chains,
         addr_description,
 
