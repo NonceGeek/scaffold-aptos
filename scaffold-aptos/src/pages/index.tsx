@@ -117,7 +117,7 @@ export default function Home() {
           Init AddrAggr in DID Contract
         </button>
         <br></br>
-        <button
+        {/* <button
           onClick={log_acct}
           className={
             "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
@@ -147,7 +147,7 @@ export default function Home() {
               "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
             }>
             Get Resource
-        </button>
+        </button> */}
         <br></br>
         <button
           onClick={get_did_resource}
@@ -195,6 +195,14 @@ export default function Home() {
               "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
             }>
             Add Addr
+        </button>
+        <br></br>
+        <button
+          // onClick={create_addr}
+            className={
+              "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+            }>
+            Update Addr
         </button>
     </div>
   );
