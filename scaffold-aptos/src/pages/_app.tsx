@@ -11,7 +11,7 @@ import {
   AptosWalletAdapter,
 } from "@manahippo/aptos-wallet-adapter";
 import { ModalContext, ModalState } from "../components/ModalContext";
-function MyApp({ Component, pageProps }: AppProps) {
+function WalletSelector({ Component, pageProps }: AppProps) {
   const [modalState, setModalState] = useState<ModalState>({
     walletModal: false,
   });
@@ -35,7 +35,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 
   return (
-    <WalletProvider wallets={wallets} autoConnect={true}>
+    <WalletProvider wallets={wallets} autoConnect={false}>
       <ModalContext.Provider value={modals}>
         <div className="px-8">
           <NavBar />
@@ -46,4 +46,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default MyApp;
+export default WalletSelector;

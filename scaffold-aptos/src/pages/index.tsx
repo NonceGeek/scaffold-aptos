@@ -11,7 +11,9 @@ import {
   AptosAccount,
   WalletClient,
   HexString,
+  AptosClient,
 } from "@martiandao/aptos-web3-bip44.js";
+import { stringToB64Url } from "arweave/node/lib/utils";
 // import { TypeTagVector } from "@martiandao/aptos-web3-bip44.js/dist/aptos_types";
 // import {TypeTagParser} from "@martiandao/aptos-web3-bip44.js/dist/transaction_builder/builder_utils";
 export default function Home() {
@@ -24,6 +26,7 @@ export default function Home() {
     resource_path: string;
     addr_type: number;
     addr: string;
+    pubkey: string;
     addr_description: string;
     chains: Array<string>;
     
@@ -32,6 +35,7 @@ export default function Home() {
     resource_path: "",
     addr_type: 1,
     addr: "",
+    pubkey: "",
     addr_description: "",
     chains: [],
   });
@@ -51,11 +55,17 @@ export default function Home() {
   }
 
   async function get_resources() {
-    console.log(client.aptosClient.getAccountResources(account!.address!.toString()));
+    client.aptosClient.getAccountResources(account!.address!.toString()).then(value =>
+      console.log(value)
+    );
+  }
+
+  async function get_table() {
+    // client.aptosClient.getTableItem()
   }
 
   async function get_resource() {
-    const { description, resource_path, addr_type, addr, addr_description, chains } = formInput;
+    const { description, resource_path, addr_type, addr, pubkey, addr_description, chains } = formInput;
     console.log(client.aptosClient.getAccountResource(account!.address!.toString(), resource_path));
   }
 
@@ -71,7 +81,7 @@ export default function Home() {
   }
 
   function init_addr_aggr() {
-    const { description, resource_path, addr_type, addr, addr_description, chains } = formInput;
+    const { description, resource_path, addr_type, addr, pubkey, addr_description, chains } = formInput;
     return {
       type: "entry_function_payload",
       function: DAPP_ADDRESS + "::addr_aggregator::create_addr_aggregator",
@@ -84,7 +94,7 @@ export default function Home() {
   }
 
   function add_addr() {
-    const { description, resource_path, addr_type, addr, addr_description, chains } = formInput;
+    const { description, resource_path, addr_type, addr, pubkey, addr_description, chains } = formInput;
     return {
       type: "entry_function_payload",
       function: DAPP_ADDRESS + "::addr_aggregator::add_addr",
@@ -92,6 +102,7 @@ export default function Home() {
       arguments: [
         addr_type,
         addr,
+        pubkey, 
         chains,
         addr_description,
 
@@ -170,6 +181,14 @@ export default function Home() {
           className="mt-8 p-4 input input-bordered input-primary w-full"
           onChange={(e) =>
             updateFormInput({ ...formInput, addr: e.target.value })
+          }
+        />
+        <br></br>
+        <input
+          placeholder="Pubkey(Optional)"
+          className="mt-8 p-4 input input-bordered input-primary w-full"
+          onChange={(e) =>
+            updateFormInput({ ...formInput, pubkey: e.target.value })
           }
         />
         <br></br>
