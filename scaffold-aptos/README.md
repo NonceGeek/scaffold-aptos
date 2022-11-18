@@ -11,4 +11,6 @@
 4. yarn dev
 5. yarn build #编译完成的 next.js 应用
 
+本项目合约基于 MoveDID 。 项目地址 <https://github.com/NonceGeek/MoveDID>
+
 本项目由[NonceGeek DAO](https://noncegeek.com/#/)维护。
