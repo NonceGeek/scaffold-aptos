@@ -23,11 +23,13 @@ export default function Home() {
   const client = new WalletClient(APTOS_NODE_URL, APTOS_FAUCET_URL);
   const [resource, setResource] = React.useState<MoveResource>();
   const [formInput, updateFormInput] = useState<{
+    name: string;
     url: string;
     description: string;
     verification_url: string;
     
   }>({
+    name: "",
     url: "",
     description: "",
     verification_url: "",
@@ -69,12 +71,13 @@ export default function Home() {
   }
 
   function add_endpoint() {
-    const { url, description, verification_url } = formInput;
+    const { name, url, description, verification_url } = formInput;
     return {
       type: "entry_function_payload",
       function: DAPP_ADDRESS + "::endpoint_aggregator::add_endpoint",
       type_arguments: [],
       arguments: [
+        name,
         url, 
         description, 
         verification_url 
@@ -105,7 +108,15 @@ export default function Home() {
           <CodeBlock code={resource} />
         )}
         <input
-          placeholder="Address Type"
+          placeholder="Endpoint Name"
+          className="mt-8 p-4 input input-bordered input-primary w-full"
+          onChange={(e) =>
+            updateFormInput({ ...formInput, name: e.target.value })
+          }
+        />
+        <br></br>
+        <input
+          placeholder="Endpoint URL"
           className="mt-8 p-4 input input-bordered input-primary w-full"
           onChange={(e) =>
             updateFormInput({ ...formInput, url: e.target.value })
@@ -113,7 +124,7 @@ export default function Home() {
         />
         <br></br>
         <input
-          placeholder="Addr"
+          placeholder="Endpoint Description"
           className="mt-8 p-4 input input-bordered input-primary w-full"
           onChange={(e) =>
             updateFormInput({ ...formInput, description: e.target.value })
@@ -121,7 +132,7 @@ export default function Home() {
         />
         <br></br>
         <input
-          placeholder="Addr Description"
+          placeholder="Endpoint Verification URL(Optional)"
           className="mt-8 p-4 input input-bordered input-primary w-full"
           onChange={(e) =>
             updateFormInput({ ...formInput, verification_url: e.target.value })
