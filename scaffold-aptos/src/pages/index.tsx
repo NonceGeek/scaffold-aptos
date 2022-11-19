@@ -13,7 +13,6 @@ import {
   HexString,
   AptosClient,
 } from "@martiandao/aptos-web3-bip44.js";
-import { stringToB64Url } from "arweave/node/lib/utils";
 
 import { CodeBlock } from "../components/CodeBlock";
 
