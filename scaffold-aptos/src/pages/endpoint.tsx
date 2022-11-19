@@ -69,7 +69,7 @@ export default function Home() {
     const { url, description, verification_url } = formInput;
     return {
       type: "entry_function_payload",
-      function: DAPP_ADDRESS + "::addr_aggregator::add_addr",
+      function: DAPP_ADDRESS + "::endpoint_aggregator::add_endpoint",
       type_arguments: [],
       arguments: [
         url, 
@@ -81,6 +81,7 @@ export default function Home() {
 
   return (
     <div>
+        <p><b>Module Path:</b> {DAPP_ADDRESS}::endpoint_addr</p>
         <button
           onClick={create_endpoints}
           className={

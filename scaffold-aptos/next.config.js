@@ -16,6 +16,7 @@ const nextConfig = {
       "aptoslabs.com",
       "miro.medium.com",
       "www.gitbook.com",
+      "raw.githubusercontent.com",
     ],
   },
   webpack5: true,

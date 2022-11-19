@@ -112,6 +112,7 @@ export default function Home() {
 
   return (
     <div>
+        <p><b>Module Path:</b> {DAPP_ADDRESS}::addr_aggregator</p>
         <input
           placeholder="Description for your DID"
           className="mt-8 p-4 input input-bordered input-primary w-full"
