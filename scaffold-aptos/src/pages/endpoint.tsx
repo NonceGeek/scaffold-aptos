@@ -87,7 +87,7 @@ export default function Home() {
 
   return (
     <div>
-        <p><b>Module Path:</b> {DAPP_ADDRESS}::endpoint_addr</p>
+        <p><b>Module Path:</b> {DAPP_ADDRESS}::endpoint_aggregator</p>
         <button
           onClick={create_endpoints}
           className={
@@ -96,17 +96,6 @@ export default function Home() {
           Init EndpointAggregator in DID Contract
         </button>
         <br></br>
-        <button
-          onClick={get_endpoint_resource}
-            className={
-              "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
-            }>
-            Get Endpoint Resource
-        </button>
-        {/* todo: format payload to w3c did standard */}
-        {resource && (
-          <CodeBlock code={resource} />
-        )}
         <input
           placeholder="Endpoint Name"
           className="mt-8 p-4 input input-bordered input-primary w-full"

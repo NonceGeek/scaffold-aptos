@@ -15,7 +15,7 @@ export function NavBar() {
         <ul className="menu menu-horizontal p-0 ml-5">
           <NavItem href="/" title="AddrAggregatorManager" />
           <NavItem href="/endpoint" title="EndpointManager" />
-          <NavItem href="/did_querier" title="DIDQuerier" />
+          {/* <NavItem href="/did_querier" title="DIDQuerier" /> */}
           <li className="font-sans font-semibold text-lg">
             <a href="https://github.com/NonceGeek/MoveDID/" target="_blank">Source Code</a>
             <a href={MODULE_URL} target="_blank">Contract on Explorer</a>
