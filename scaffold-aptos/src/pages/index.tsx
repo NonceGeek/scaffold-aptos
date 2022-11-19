@@ -34,7 +34,7 @@ export default function Home() {
     pubkey: string;
     addr_description: string;
     chains: Array<string>;
-    
+
   }>({
     description: "",
     resource_path: "",
@@ -74,25 +74,25 @@ export default function Home() {
     console.log(client.aptosClient.getAccountResource(account!.address!.toString(), resource_path));
   }
 
-  async function faas_test(){
+  async function faas_test() {
     newAxios.post(
       '/api/v1/run?name=DID.Renderer&func_name=get_module_doc',
-      {"params": [
-      ]},
-    ).then(
-      value => 
       {
+        "params": [
+        ]
+      },
+    ).then(
+      value => {
         console.log(value.data);
       }
     );
-}
+  }
   async function get_did_resource_v2() {
     newAxios.post(
       '/api/v1/run?name=DID.Renderer&func_name=gen_did_document',
-      {"params": [account!.address!.toString()]},
+      { "params": [account!.address!.toString()] },
     ).then(
-      value => 
-      {
+      value => {
         console.log(value.data)
         setResourceV2(value.data)
       }
@@ -100,8 +100,8 @@ export default function Home() {
   }
 
   async function get_did_resource() {
-  
-    client.aptosClient.getAccountResource(account!.address!.toString(),  DAPP_ADDRESS + "::addr_aggregator::AddrAggregator").then(
+
+    client.aptosClient.getAccountResource(account!.address!.toString(), DAPP_ADDRESS + "::addr_aggregator::AddrAggregator").then(
       setResource
     );
   }
@@ -133,7 +133,7 @@ export default function Home() {
       arguments: [
         addr_type,
         addr,
-        pubkey, 
+        pubkey,
         chains,
         addr_description,
 
@@ -143,92 +143,92 @@ export default function Home() {
 
   return (
     <div>
-        <p><b>Module Path:</b> {DAPP_ADDRESS}::addr_aggregator</p>
-        <input
-          placeholder="Description for your DID"
-          className="mt-8 p-4 input input-bordered input-primary w-full"
-          onChange={(e) =>
-            updateFormInput({ ...formInput, description: e.target.value })
-          }
-        />
-        <br></br>
-        <button
-          onClick={create_did}
-          className={
-            "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
-          }>
-          Init AddrAggr in DID Contract
-        </button>
-        <br></br>
-        <br></br>
-        <button
-          onClick={get_did_resource_v2}
-            className={
-              "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
-            }>
-            Get DID Resource
-        </button>
-        {resource && (
-          <CodeBlock code={resource_v2} />
-        )}
-        <br></br>
-        <select
-          value={formInput.addr_type}
-          onChange={(e) => {
-            updateFormInput({ ...formInput, addr_type: parseInt(e.target.value) })
-          }}
-        >
-          <option value="0">Ethereum Type Addr</option>
-          <option value="1">Aptos Type Addr</option>
-        </select>
-        <br></br>
-        <input
-          placeholder="Addr"
-          className="mt-8 p-4 input input-bordered input-primary w-full"
-          onChange={(e) =>
-            updateFormInput({ ...formInput, addr: e.target.value })
-          }
-        />
-        <br></br>
-        <input
-          placeholder="Pubkey(Optional)"
-          className="mt-8 p-4 input input-bordered input-primary w-full"
-          onChange={(e) =>
-            updateFormInput({ ...formInput, pubkey: e.target.value })
-          }
-        />
-        <br></br>
-        <input
-          placeholder="Addr Description"
-          className="mt-8 p-4 input input-bordered input-primary w-full"
-          onChange={(e) =>
-            updateFormInput({ ...formInput, addr_description: e.target.value })
-          }
-        />
-        <br></br>
-        <input
-          placeholder="Chains"
-          className="mt-8 p-4 input input-bordered input-primary w-full"
-          onChange={(e) =>
-            updateFormInput({ ...formInput, chains: JSON.parse(e.target.value) })
-          }
-        />
-        <br></br>
-        <button
-          onClick={create_addr}
-            className={
-              "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
-            }>
-            Add Addr
-        </button>
-        <br></br>
-        <button
-          // onClick={create_addr}
-            className={
-              "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
-            }>
-            Update Addr
-        </button>
+      <p><b>Module Path:</b> {DAPP_ADDRESS}::addr_aggregator</p>
+      <input
+        placeholder="Description for your DID"
+        className="mt-8 p-4 input input-bordered input-primary w-full"
+        onChange={(e) =>
+          updateFormInput({ ...formInput, description: e.target.value })
+        }
+      />
+      <br></br>
+      <button
+        onClick={create_did}
+        className={
+          "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+        }>
+        Init AddrAggr in DID Contract
+      </button>
+      <br></br>
+      <br></br>
+      <button
+        onClick={get_did_resource_v2}
+        className={
+          "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+        }>
+        Get DID Resource
+      </button>
+      {resource_v2 && (
+        <CodeBlock code={resource_v2} />
+      )}
+      <br></br>
+      <select
+        value={formInput.addr_type}
+        onChange={(e) => {
+          updateFormInput({ ...formInput, addr_type: parseInt(e.target.value) })
+        }}
+      >
+        <option value="0">Ethereum Type Addr</option>
+        <option value="1">Aptos Type Addr</option>
+      </select>
+      <br></br>
+      <input
+        placeholder="Addr"
+        className="mt-8 p-4 input input-bordered input-primary w-full"
+        onChange={(e) =>
+          updateFormInput({ ...formInput, addr: e.target.value })
+        }
+      />
+      <br></br>
+      <input
+        placeholder="Pubkey(Optional)"
+        className="mt-8 p-4 input input-bordered input-primary w-full"
+        onChange={(e) =>
+          updateFormInput({ ...formInput, pubkey: e.target.value })
+        }
+      />
+      <br></br>
+      <input
+        placeholder="Addr Description"
+        className="mt-8 p-4 input input-bordered input-primary w-full"
+        onChange={(e) =>
+          updateFormInput({ ...formInput, addr_description: e.target.value })
+        }
+      />
+      <br></br>
+      <input
+        placeholder="Chains"
+        className="mt-8 p-4 input input-bordered input-primary w-full"
+        onChange={(e) =>
+          updateFormInput({ ...formInput, chains: JSON.parse(e.target.value) })
+        }
+      />
+      <br></br>
+      <button
+        onClick={create_addr}
+        className={
+          "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+        }>
+        Add Addr
+      </button>
+      <br></br>
+      <button
+        // onClick={create_addr}
+        className={
+          "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+        }>
+        Update Addr
+      </button>
     </div>
   );
 }
