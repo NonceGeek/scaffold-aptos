@@ -3,7 +3,7 @@ import { MoveResource } from "@martiandao/aptos-web3-bip44.js/dist/generated";
 export function CodeBlock({
   code
 }: {
-  code: MoveResource
+  code: any;
 }) {
   return (
     <div className="mt-4">

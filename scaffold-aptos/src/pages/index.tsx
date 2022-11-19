@@ -16,6 +16,8 @@ import {
 
 import { CodeBlock } from "../components/CodeBlock";
 
+import newAxios from "../utils/axios_utils";
+
 // import { TypeTagVector } from "@martiandao/aptos-web3-bip44.js/dist/aptos_types";
 // import {TypeTagParser} from "@martiandao/aptos-web3-bip44.js/dist/transaction_builder/builder_utils";
 export default function Home() {
@@ -23,6 +25,7 @@ export default function Home() {
   const { account, signAndSubmitTransaction } = useWallet();
   const client = new WalletClient(APTOS_NODE_URL, APTOS_FAUCET_URL);
   const [resource, setResource] = React.useState<MoveResource>();
+  const [resource_v2, setResource_v2] = React.useState();
   const [formInput, updateFormInput] = useState<{
     description: string;
     resource_path: string;
@@ -71,7 +74,20 @@ export default function Home() {
     console.log(client.aptosClient.getAccountResource(account!.address!.toString(), resource_path));
   }
 
+  async function get_did_resource_v2() {
+    newAxios.post(
+      '/api/v1/run?name=DID.Renderer&func_name=gen_did_document',
+      [account!.address!.toString()],
+    ).then(
+      value => 
+      {
+        setResource_v2(value.data)
+      }
+    );
+  }
+
   async function get_did_resource() {
+  
     client.aptosClient.getAccountResource(account!.address!.toString(),  DAPP_ADDRESS + "::addr_aggregator::AddrAggregator").then(
       setResource
     );
@@ -133,14 +149,14 @@ export default function Home() {
         <br></br>
         <br></br>
         <button
-          onClick={get_did_resource}
+          onClick={get_did_resource_v2}
             className={
               "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
             }>
             Get DID Resource
         </button>
         {resource && (
-          <CodeBlock code={resource} />
+          <CodeBlock code={resource_v2} />
         )}
         <br></br>
         <select
