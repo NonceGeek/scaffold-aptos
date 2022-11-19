@@ -14,6 +14,9 @@ import {
   AptosClient,
 } from "@martiandao/aptos-web3-bip44.js";
 import { stringToB64Url } from "arweave/node/lib/utils";
+
+import { CodeBlock } from "../components/CodeBlock";
+
 // import { TypeTagVector } from "@martiandao/aptos-web3-bip44.js/dist/aptos_types";
 // import {TypeTagParser} from "@martiandao/aptos-web3-bip44.js/dist/transaction_builder/builder_utils";
 export default function Home() {
@@ -137,7 +140,9 @@ export default function Home() {
             }>
             Get DID Resource
         </button>
-        <p>{JSON.stringify(resource)}</p>
+        {resource && (
+          <CodeBlock code={resource} />
+        )}
         <br></br>
         <select
           value={formInput.addr_type}

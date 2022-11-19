@@ -12,6 +12,9 @@ import {
   WalletClient,
   HexString,
 } from "@martiandao/aptos-web3-bip44.js";
+
+import { CodeBlock } from "../components/CodeBlock";
+
 // import { TypeTagVector } from "@martiandao/aptos-web3-bip44.js/dist/aptos_types";
 // import {TypeTagParser} from "@martiandao/aptos-web3-bip44.js/dist/transaction_builder/builder_utils";
 export default function Home() {
@@ -98,7 +101,9 @@ export default function Home() {
             Get Endpoint Resource
         </button>
         {/* todo: format payload to w3c did standard */}
-        <p>{JSON.stringify(resource)}</p>
+        {resource && (
+          <CodeBlock code={resource} />
+        )}
         <input
           placeholder="Address Type"
           className="mt-8 p-4 input input-bordered input-primary w-full"
