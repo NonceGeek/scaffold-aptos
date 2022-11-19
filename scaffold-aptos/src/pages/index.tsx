@@ -33,7 +33,7 @@ export default function Home() {
   }>({
     description: "",
     resource_path: "",
-    addr_type: 1,
+    addr_type: 0,
     addr: "",
     pubkey: "",
     addr_description: "",
@@ -129,37 +129,6 @@ export default function Home() {
           Init AddrAggr in DID Contract
         </button>
         <br></br>
-        {/* <button
-          onClick={log_acct}
-          className={
-            "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
-          }>
-          Log Acct
-        </button>
-        <br></br>
-        <button
-          onClick={get_resources}
-          className={
-            "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
-          }>
-          Get Resources
-        </button>
-        <br></br>
-        <input
-          placeholder="0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>"
-          className="mt-8 p-4 input input-bordered input-primary w-full"
-          onChange={(e) =>
-            updateFormInput({ ...formInput, resource_path: e.target.value })
-          }
-        />
-        <br></br>
-        <button
-          onClick={get_resource}
-            className={
-              "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
-            }>
-            Get Resource
-        </button> */}
         <br></br>
         <button
           onClick={get_did_resource}
@@ -169,13 +138,16 @@ export default function Home() {
             Get DID Resource
         </button>
         <p>{JSON.stringify(resource)}</p>
-        <input
-          placeholder="Address Type"
-          className="mt-8 p-4 input input-bordered input-primary w-full"
-          onChange={(e) =>
+        <br></br>
+        <select
+          value={formInput.addr_type}
+          onChange={(e) => {
             updateFormInput({ ...formInput, addr_type: parseInt(e.target.value) })
-          }
-        />
+          }}
+        >
+          <option value="0">Ethereum Type Addr</option>
+          <option value="1">Aptos Type Addr</option>
+        </select>
         <br></br>
         <input
           placeholder="Addr"
