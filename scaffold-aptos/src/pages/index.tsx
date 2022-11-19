@@ -25,7 +25,7 @@ export default function Home() {
   const { account, signAndSubmitTransaction } = useWallet();
   const client = new WalletClient(APTOS_NODE_URL, APTOS_FAUCET_URL);
   const [resource, setResource] = React.useState<MoveResource>();
-  const [resource_v2, setResource_v2] = React.useState();
+  const [resource_v2, setResourceV2] = React.useState();
   const [formInput, updateFormInput] = useState<{
     description: string;
     resource_path: string;
@@ -74,14 +74,27 @@ export default function Home() {
     console.log(client.aptosClient.getAccountResource(account!.address!.toString(), resource_path));
   }
 
-  async function get_did_resource_v2() {
+  async function faas_test(){
     newAxios.post(
-      '/api/v1/run?name=DID.Renderer&func_name=gen_did_document',
-      [account!.address!.toString()],
+      '/api/v1/run?name=DID.Renderer&func_name=get_module_doc',
+      {"params": [
+      ]},
     ).then(
       value => 
       {
-        setResource_v2(value.data)
+        console.log(value.data);
+      }
+    );
+}
+  async function get_did_resource_v2() {
+    newAxios.post(
+      '/api/v1/run?name=DID.Renderer&func_name=gen_did_document',
+      {"params": [account!.address!.toString()]},
+    ).then(
+      value => 
+      {
+        console.log(value.data)
+        setResourceV2(value.data)
       }
     );
   }
