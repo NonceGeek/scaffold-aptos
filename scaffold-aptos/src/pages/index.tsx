@@ -59,6 +59,13 @@ export default function Home() {
     );
   }
 
+  async function del_addr() {
+    await signAndSubmitTransaction(
+      delete_addr(),
+      { gas_unit_price: 100 }
+    );
+  }
+
   async function get_resources() {
     client.aptosClient.getAccountResources(account!.address!.toString()).then(value =>
       console.log(value)
@@ -137,6 +144,18 @@ export default function Home() {
         chains,
         addr_description,
 
+      ],
+    };
+  }
+
+  function delete_addr() {
+    const { addr } = formInput;
+    return {
+      type: "entry_function_payload",
+      function: DAPP_ADDRESS + "::addr_aggregator::delete_addr",
+      type_arguments: [],
+      arguments: [
+        addr,
       ],
     };
   }
@@ -228,6 +247,13 @@ export default function Home() {
           "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
         }>
         Update Addr
+      </button>
+      <button
+        onClick={del_addr}
+        className={
+          "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+        }>
+        Delete Addr
       </button>
     </div>
   );
