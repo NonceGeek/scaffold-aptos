@@ -27,6 +27,7 @@ export default function Home() {
   const [resource, setResource] = React.useState<MoveResource>();
   const [resource_v2, setResourceV2] = React.useState();
   const [formInput, updateFormInput] = useState<{
+    did_type: number;
     description: string;
     resource_path: string;
     addr_type: number;
@@ -36,6 +37,7 @@ export default function Home() {
     chains: Array<string>;
 
   }>({
+    did_type: 0,
     description: "",
     resource_path: "",
     addr_type: 0,
@@ -45,9 +47,9 @@ export default function Home() {
     chains: [],
   });
 
-  async function create_did() {
+  async function init_did() {
     await signAndSubmitTransaction(
-      init_addr_aggr(),
+      do_init_did(),
       { gas_unit_price: 100 }
     );
   }
@@ -118,11 +120,11 @@ export default function Home() {
     console.log(account!.address!.toString());
   }
 
-  function init_addr_aggr() {
+  function do_init_did() {
     const { description, resource_path, addr_type, addr, pubkey, addr_description, chains } = formInput;
     return {
       type: "entry_function_payload",
-      function: DAPP_ADDRESS + "::addr_aggregator::create_addr_aggregator",
+      function: DAPP_ADDRESS + "::init::init",
       type_arguments: [],
       arguments: [
         0,
@@ -171,13 +173,25 @@ export default function Home() {
         }
       />
       <br></br>
+      <br></br>
+      The type of DID Owner: &nbsp; &nbsp; &nbsp; &nbsp; 
+      <select
+        value={formInput.did_type}
+        onChange={(e) => {
+          updateFormInput({ ...formInput, did_type: parseInt(e.target.value) })
+        }}
+      >
+        <option value="0">Individual</option>
+        <option value="1">DAO</option>
+      </select>
+      <br></br>
       <button
-        onClick={create_did}
+        onClick={init_did}
         className={
           "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
         }>
-        Init AddrAggr in DID Contract
-      </button>
+        Init Your DID
+      </button> &nbsp; &nbsp; &nbsp; &nbsp; 💡 INIT Your DID on Aptos before the other Operations!
       <br></br>
       <br></br>
       <button

@@ -7,7 +7,7 @@ export const DAPP_ADDRESS = process.env.NEXT_PUBLIC_DAPP_ADDRESS!; // changed he
 export const MARKET_COINT_TYPE = process.env.NEXT_PUBLIC_MARKET_COIN_TYPE!;
 
 export const APTOS_NODE_URL = process.env.NEXT_PUBLIC_APTOS_NODE_URL!;
-export const APTOS_FAUCET_URL = process.env.NEXT_PUBLIC_APTOS_FAUCET_URL!;
+export const APTOS_FAUCET_URL = "https://faucet.devnet.aptoslabs.com/v1/";
 
 export const NETWORK=process.env.NEXT_PUBLIC_APTOS_NETWORK!;
 
