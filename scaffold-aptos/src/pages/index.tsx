@@ -5,29 +5,30 @@ import {
 } from "../config/constants";
 import { useWallet } from "@manahippo/aptos-wallet-adapter";
 import { MoveResource } from "@martiandao/aptos-web3-bip44.js/dist/generated";
-import { useState } from "react";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import {
   AptosAccount,
   WalletClient,
   HexString,
   AptosClient,
 } from "@martiandao/aptos-web3-bip44.js";
-
 import { CodeBlock } from "../components/CodeBlock";
-
 import newAxios from "../utils/axios_utils";
 
 // import { TypeTagVector } from "@martiandao/aptos-web3-bip44.js/dist/aptos_types";
 // import {TypeTagParser} from "@martiandao/aptos-web3-bip44.js/dist/transaction_builder/builder_utils";
 export default function Home() {
-
-  const { account, signAndSubmitTransaction } = useWallet();
+  const router = useRouter();
+  const { account, signAndSubmitTransaction, connected, signMessage, wallet } = useWallet();
   const client = new WalletClient(APTOS_NODE_URL, APTOS_FAUCET_URL);
   const [resource, setResource] = React.useState<MoveResource>();
   const [resource_v2, setResourceV2] = React.useState();
+
+  const [msg, setMsg] = useState("");
+  const [signData, setSignData] = useState("");
   const [formInput, updateFormInput] = useState<{
-    did_type: number;
+    did_type: number
     description: string;
     resource_path: string;
     addr_type: number;
@@ -35,7 +36,6 @@ export default function Home() {
     pubkey: string;
     addr_description: string;
     chains: Array<string>;
-
   }>({
     did_type: 0,
     description: "",
@@ -109,7 +109,6 @@ export default function Home() {
   }
 
   async function get_did_resource() {
-
     client.aptosClient.getAccountResource(account!.address!.toString(), DAPP_ADDRESS + "::addr_aggregator::AddrAggregator").then(
       setResource
     );
@@ -162,8 +161,87 @@ export default function Home() {
     };
   }
 
+
+  const buildSignMessagePayload = (messageToSign: string) => {
+    const nonce = 'random_string';
+    return [
+      'pontem',
+      'petra',
+      'martian',
+      'fewcha',
+      'rise wallet',
+      'snap',
+      'bitkeep',
+      'blocto',
+      'coin98',
+      'foxwallet',
+      'openblock'
+    ].includes(wallet?.adapter?.name?.toLowerCase() || '')
+      ? {
+        message: messageToSign,
+        nonce
+      }
+      : messageToSign;
+  }
+
+
+  useEffect(() => {
+    (async () => {
+      if (typeof router.query.msg == 'string') {
+        setMsg(router.query.msg);
+      }
+    })();
+  });
+
+  // 参考代码: https://github.com/hippospace/aptos-wallet-adapter/blob/6c4f4f3e91a8985bb7ab40873afc44f7402ecd30/packages/wallet-nextjs/pages/index.tsx
+  useEffect((() => {
+    (async () => {
+      if (connected) {
+        if (typeof msg == 'string') {
+          const signedMessage = await signMessage(buildSignMessagePayload(msg));
+          const response = typeof signedMessage === 'string' ? signedMessage : signedMessage.signature;
+          setSignData(response.toString());
+        }
+      }
+    })();
+  }), [msg])
+
+  const signMessageAction = async () => {
+    if (connected) {
+      const signedMessage = await signMessage(buildSignMessagePayload(msg));
+      const response = typeof signedMessage === 'string' ? signedMessage : signedMessage.signature;
+      setSignData(response.toString());
+    } else {
+      alert("connect wallet first...");
+    }
+  }
+
   return (
     <div>
+      <div className="m-7 p-4  w-full rounded-md border-2">
+        <input
+          placeholder="message"
+          className="mt-8 p-4 input input-bordered input-primary w-full"
+          onChange={(e) =>
+            setMsg(e.target.value)
+          }
+          value={msg}
+        />
+        <button
+          onClick={signMessageAction}
+          className={
+            "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+          }>
+          Sign Messsage
+        </button>
+
+        <div className="w-full mt-3  rounded-md ">
+          <p className="rounded-md border-slate-600	">
+            Sign Content :  <b> {signData} </b>
+          </p>
+        </div>
+      </div>
+
       <p><b>Module Path:</b> {DAPP_ADDRESS}::addr_aggregator</p>
       <input
         placeholder="Description for your DID"
@@ -174,7 +252,7 @@ export default function Home() {
       />
       <br></br>
       <br></br>
-      The type of DID Owner: &nbsp; &nbsp; &nbsp; &nbsp; 
+      The type of DID Owner: &nbsp; &nbsp; &nbsp; &nbsp;
       <select
         value={formInput.did_type}
         onChange={(e) => {
