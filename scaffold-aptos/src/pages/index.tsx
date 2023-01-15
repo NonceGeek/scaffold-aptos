@@ -18,9 +18,16 @@ import { CodeBlock } from "../components/CodeBlock";
 
 import newAxios from "../utils/axios_utils";
 
+import Select from 'react-select';
+
 // import { TypeTagVector } from "@martiandao/aptos-web3-bip44.js/dist/aptos_types";
 // import {TypeTagParser} from "@martiandao/aptos-web3-bip44.js/dist/transaction_builder/builder_utils";
 export default function Home() {
+  const options = [
+    { value: 'ethereum', label: 'ethereum' },
+    { value: 'polygon', label: 'polygon' },
+  ];
+  const [selectedOption, setSelectedOption] = useState(null);
 
   const { account, signAndSubmitTransaction } = useWallet();
   const client = new WalletClient(APTOS_NODE_URL, APTOS_FAUCET_URL);
@@ -35,7 +42,6 @@ export default function Home() {
     pubkey: string;
     addr_description: string;
     chains: Array<string>;
-
   }>({
     did_type: 0,
     description: "",
@@ -145,7 +151,6 @@ export default function Home() {
         pubkey,
         chains,
         addr_description,
-
       ],
     };
   }
@@ -174,7 +179,7 @@ export default function Home() {
       />
       <br></br>
       <br></br>
-      The type of DID Owner: &nbsp; &nbsp; &nbsp; &nbsp; 
+      The type of DID Owner: &nbsp; &nbsp; &nbsp; &nbsp;
       <select
         value={formInput.did_type}
         onChange={(e) => {
@@ -239,12 +244,51 @@ export default function Home() {
         }
       />
       <br></br>
-      <input
+      {/* <input
         placeholder="Chains"
         className="mt-8 p-4 input input-bordered input-primary w-full"
-        onChange={(e) =>
-          updateFormInput({ ...formInput, chains: JSON.parse(e.target.value) })
-        }
+        // onChange={(e) =>
+        //   updateFormInput({ ...formInput, addr_description: e.target.value })
+        // }
+        list="chain_list"
+        multiple={true}
+        type="text"
+      />
+      <datalist id="chain_list">
+        <option value="ethereum" />
+        <option value="polygon" />
+      </datalist> */}
+      <Select
+        placeholder="Chains"
+        // className="mt-8 p-4 input input-bordered input-primary w-full"
+        // className="mt-8 input-primary w-full select-input"
+        className="mt-8 input-primary w-full select-input"
+        onChange={(e) => {
+          updateFormInput({ ...formInput, chains: e.map(x => { return x?.value || "" }) })
+        }}
+        defaultValue={selectedOption}
+        options={options}
+        isMulti={true}
+        styles={{
+          control: (baseStyles, state) => {
+            return {
+              // display
+              display: 'flex',
+              alignItems: 'center',
+              // height & width
+              width: '100%',
+              height: '3rem',
+              // outline
+              outline: state.isFocused ? '2px solid #570df8' : '0px',
+              outlineOffset: '3px',
+              // border & padding
+              borderRadius: '8px',
+              paddingLeft: '0.4rem',
+              // size
+              fontSize: '1rem',
+            }
+          },
+        }}
       />
       <br></br>
       <button
@@ -269,6 +313,6 @@ export default function Home() {
         }>
         Delete Addr
       </button>
-    </div>
+    </div >
   );
 }
