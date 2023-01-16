@@ -35,7 +35,7 @@ function WalletSelector({ Component, pageProps }: AppProps) {
   );
 
   return (
-    <WalletProvider wallets={wallets} autoConnect={false}>
+    <WalletProvider wallets={wallets} autoConnect={true}>
       <ModalContext.Provider value={modals}>
         <div className="px-8">
           <NavBar />
