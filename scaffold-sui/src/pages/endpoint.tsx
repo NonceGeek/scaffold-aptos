@@ -17,7 +17,7 @@ export default function Home() {
     url: string;
     description: string;
     verification_url: string;
-    
+
   }>({
     name: "",
     url: "",
@@ -79,9 +79,9 @@ export default function Home() {
       typeArguments: [],
       arguments: [
         name,
-        url, 
-        description, 
-        verification_url 
+        url,
+        description,
+        verification_url
       ],
       // gasPayment: '',
       gasBudget: 30000,
@@ -90,62 +90,62 @@ export default function Home() {
 
   return (
     <div>
-        <p><b>Module Path:</b> {DAPP_ADDRESS}::endpoint_aggregator</p>
-        <button
-          onClick={create_endpoints}
-          className={
-            "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
-          }>
-          Init EndpointAggregator in DID Contract
-        </button>
-        <br></br>
-        <input
-          placeholder="Endpoint Name"
-          className="mt-8 p-4 input input-bordered input-primary w-full"
-          onChange={(e) =>
-            updateFormInput({ ...formInput, name: e.target.value })
-          }
-        />
-        <br></br>
-        <input
-          placeholder="Endpoint URL"
-          className="mt-8 p-4 input input-bordered input-primary w-full"
-          onChange={(e) =>
-            updateFormInput({ ...formInput, url: e.target.value })
-          }
-        />
-        <br></br>
-        <input
-          placeholder="Endpoint Description"
-          className="mt-8 p-4 input input-bordered input-primary w-full"
-          onChange={(e) =>
-            updateFormInput({ ...formInput, description: e.target.value })
-          }
-        />
-        <br></br>
-        <input
-          placeholder="Endpoint Verification URL(Optional)"
-          className="mt-8 p-4 input input-bordered input-primary w-full"
-          onChange={(e) =>
-            updateFormInput({ ...formInput, verification_url: e.target.value })
-          }
-        />
-        <br></br>
-        <button
-          onClick={create_endpoint}
-            className={
-              "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
-            }>
-            Add Endpoint
-        </button>
-        <br></br>
-        <button
-          // onClick={create_addr}
-            className={
-              "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
-            }>
-            Update Endpoint
-        </button>
+      <p><b>Module Path:</b> {DAPP_ADDRESS}::endpoint_aggregator</p>
+      <button
+        onClick={create_endpoints}
+        className={
+          "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+        }>
+        Init EndpointAggregator in DID Contract
+      </button>
+      <br></br>
+      <input
+        placeholder="Endpoint Name"
+        className="mt-8 p-4 input input-bordered input-primary w-full"
+        onChange={(e) =>
+          updateFormInput({ ...formInput, name: e.target.value })
+        }
+      />
+      <br></br>
+      <input
+        placeholder="Endpoint URL"
+        className="mt-8 p-4 input input-bordered input-primary w-full"
+        onChange={(e) =>
+          updateFormInput({ ...formInput, url: e.target.value })
+        }
+      />
+      <br></br>
+      <input
+        placeholder="Endpoint Description"
+        className="mt-8 p-4 input input-bordered input-primary w-full"
+        onChange={(e) =>
+          updateFormInput({ ...formInput, description: e.target.value })
+        }
+      />
+      <br></br>
+      <input
+        placeholder="Endpoint Verification URL(Optional)"
+        className="mt-8 p-4 input input-bordered input-primary w-full"
+        onChange={(e) =>
+          updateFormInput({ ...formInput, verification_url: e.target.value })
+        }
+      />
+      <br></br>
+      <button
+        onClick={create_endpoint}
+        className={
+          "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+        }>
+        Add Endpoint
+      </button>
+      <br></br>
+      <button
+        // onClick={create_addr}
+        className={
+          "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+        }>
+        Update Endpoint
+      </button>
     </div>
   );
 }

@@ -8,4 +8,4 @@ export const MARKET_COINT_TYPE = process.env.NEXT_PUBLIC_MARKET_COIN_TYPE!;
 
 export const NETWORK=process.env.NEXT_PUBLIC_SUI_NETWORK!;
 
-export const MODULE_URL="https://explorer.aptoslabs.com/account/" + DAPP_ADDRESS + "/modules?network=" + NETWORK
+export const MODULE_URL="https://explorer.sui.io/object/" + DAPP_ADDRESS + "?network=" + NETWORK
