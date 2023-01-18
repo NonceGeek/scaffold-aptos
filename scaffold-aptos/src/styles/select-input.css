@@ -1,0 +1,10 @@
+.select-input {
+  border-width: 1px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  /* .input */
+  font-size: 1rem;
+  height: 3rem;
+  outline-offset: 2px;
+}
