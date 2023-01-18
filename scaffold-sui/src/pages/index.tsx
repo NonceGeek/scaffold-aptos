@@ -2,13 +2,14 @@ import {
   DAPP_ADDRESS,
 } from "../config/constants";
 import { useWallet } from "@suiet/wallet-kit";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import Link from 'next/link';
+import { JsonRpcProvider } from '@mysten/sui.js';
 
 export default function Home() {
-
-  const { account, signAndExecuteTransaction } = useWallet();
+  const provider = new JsonRpcProvider();
+  const { account, connected, signAndExecuteTransaction } = useWallet();
   const [formInput, updateFormInput] = useState<{
     name: string;
     url: string;
@@ -20,6 +21,13 @@ export default function Home() {
   });
   const [message, setMessage] = useState('');
   const [tx, setTx] = useState('');
+  const [nfts, setNfts] = useState<Array<{ id: string, name: string, url: string, description: string }>>([]);
+
+  const PACKAGE_ID = remove_leading_zero(DAPP_ADDRESS);
+
+  function remove_leading_zero(address: string) {
+    return address.replace(/0x[0]+/, '0x')
+  }
 
   async function mint_example_nft() {
     setMessage("");
@@ -48,7 +56,7 @@ export default function Home() {
   function create_example_nft() {
     const { name, url, description } = formInput;
     return {
-      packageObjectId: DAPP_ADDRESS,
+      packageObjectId: PACKAGE_ID,
       module: 'devnet_nft',
       function: 'mint',
       typeArguments: [],
@@ -61,10 +69,35 @@ export default function Home() {
     };
   }
 
+  async function fetch_example_nft() {
+    const objects = await provider.getObjectsOwnedByAddress(account!.address)
+    const nft_ids = objects
+      .filter(item => item.type === PACKAGE_ID + "::devnet_nft::DevNetNFT")
+      .map(item => item.objectId)
+    const nftObjects = await provider.getObjectBatch(nft_ids)
+    const nfts = nftObjects.filter(item => item.status === "Exists").map(item => {
+      return {
+        id: item.details.data.fields.id.id,
+        name: item.details.data.fields.name,
+        url: item.details.data.fields.url,
+        description: item.details.data.fields.description,
+      }
+    })
+    setNfts(nfts)
+  }
+
+  useEffect(() => {
+    (async () => {
+      if (connected) {
+        fetch_example_nft()
+      }
+    })()
+  }, [connected, tx])
+
   return (
     <div>
       <p><b>Mint Example NFT</b></p>
-      <p className="mt-4"><b>Module Path:</b> {DAPP_ADDRESS}::devnet_nft</p>
+      <p className="mt-4"><b>Module Path:</b> {PACKAGE_ID}::devnet_nft</p>
       <br></br>
       <input
         placeholder="NFT Name"
@@ -98,8 +131,14 @@ export default function Home() {
         Mint example NFT
       </button>
       <br></br>
-      <p className="mt-4">{message}</p>
-      {message && <p className="mt-4"><Link href={tx}>View transaction</Link></p>}
+      <p className="mt-4">{message}{message && <Link href={tx}>, View transaction</Link>}</p>
+      <br></br>
+      <p className="mt-4"><b>Minted NFTs:</b></p>
+      {nfts && nfts.map((item, i) => <div className="gallery">
+        <img src={item.url} max-width="300" max-height="200"></img>
+        <div className="name">{item.name}</div>
+        <div className="desc">{item.description}</div>
+      </div>)}
     </div>
   );
 }

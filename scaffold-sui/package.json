@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@mysten/sui.js": "^0.22.0",
     "@suiet/wallet-kit": "latest",
     "@solana/web3.js": "^1.66.2",
     "@supabase/supabase-js": "^1.35.6",
