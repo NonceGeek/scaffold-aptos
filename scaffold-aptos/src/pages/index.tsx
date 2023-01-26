@@ -194,18 +194,6 @@ export default function Home() {
   });
 
   // 参考代码: https://github.com/hippospace/aptos-wallet-adapter/blob/6c4f4f3e91a8985bb7ab40873afc44f7402ecd30/packages/wallet-nextjs/pages/index.tsx
-  useEffect((() => {
-    (async () => {
-      if (connected) {
-        if (typeof msg == 'string') {
-          const signedMessage = await signMessage(buildSignMessagePayload(msg));
-          const response = typeof signedMessage === 'string' ? signedMessage : signedMessage.signature;
-          setSignData(response.toString());
-        }
-      }
-    })();
-  }), [msg])
-
   const signMessageAction = async () => {
     if (connected) {
       const signedMessage = await signMessage(buildSignMessagePayload(msg));
