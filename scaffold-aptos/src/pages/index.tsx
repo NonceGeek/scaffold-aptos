@@ -5,7 +5,7 @@ import {
 } from "../config/constants";
 import { useWallet } from "@manahippo/aptos-wallet-adapter";
 import { MoveResource } from "@martiandao/aptos-web3-bip44.js/dist/generated";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import {
   AptosAccount,
@@ -184,14 +184,14 @@ export default function Home() {
       : messageToSign;
   }
 
-
   useEffect(() => {
     (async () => {
+      console.log("render once ...");
       if (typeof router.query.msg == 'string') {
         setMsg(router.query.msg);
       }
     })();
-  });
+  }, [router.query]);
 
   // 参考代码: https://github.com/hippospace/aptos-wallet-adapter/blob/6c4f4f3e91a8985bb7ab40873afc44f7402ecd30/packages/wallet-nextjs/pages/index.tsx
   const signMessageAction = async () => {
