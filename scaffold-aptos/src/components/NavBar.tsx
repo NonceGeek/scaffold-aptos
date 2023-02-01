@@ -14,7 +14,7 @@ export function NavBar() {
         </a>
         <ul className="menu menu-horizontal p-0 ml-5">
           <NavItem href="/" title="AddrManager" />
-          <NavItem href="/endpoint" title="ServiceManager" />
+          <NavItem href="/service" title="ServiceManager" />
           {/* <NavItem href="/did_querier" title="DIDQuerier" /> */}
           <li className="font-sans font-semibold text-lg">
             <a href="https://github.com/NonceGeek/MoveDID/tree/main/did-aptos" target="_blank">Source Code</a>
