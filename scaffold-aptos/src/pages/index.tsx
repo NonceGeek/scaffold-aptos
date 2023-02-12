@@ -6,7 +6,6 @@ import {
 import { useWallet } from "@manahippo/aptos-wallet-adapter";
 import { MoveResource } from "@martiandao/aptos-web3-bip44.js/dist/generated";
 import { useState } from "react";
-import React from "react";
 import {
   AptosAccount,
   WalletClient,
@@ -18,10 +17,12 @@ import { CodeBlock } from "../components/CodeBlock";
 
 import newAxios from "../utils/axios_utils";
 
+import React, { KeyboardEventHandler } from 'react';
+import CreatableSelect from 'react-select/creatable';
+
 // import { TypeTagVector } from "@martiandao/aptos-web3-bip44.js/dist/aptos_types";
 // import {TypeTagParser} from "@martiandao/aptos-web3-bip44.js/dist/transaction_builder/builder_utils";
 export default function Home() {
-
   const { account, signAndSubmitTransaction } = useWallet();
   const client = new WalletClient(APTOS_NODE_URL, APTOS_FAUCET_URL);
   const [resource, setResource] = React.useState<MoveResource>();
@@ -35,7 +36,6 @@ export default function Home() {
     pubkey: string;
     addr_description: string;
     chains: Array<string>;
-
   }>({
     did_type: 0,
     description: "",
@@ -46,6 +46,34 @@ export default function Home() {
     addr_description: "",
     chains: [],
   });
+
+  const components = {
+    DropdownIndicator: null,
+  };
+
+  interface Option {
+    readonly label: string;
+    readonly value: string;
+  }
+
+  const createOption = (label: string) => ({
+    label,
+    value: label,
+  });
+  const [inputValue, setInputValue] = React.useState('');
+  const [chainsValue, setChainsValue] = React.useState<readonly Option[]>([]);
+
+  const handleKeyDown: KeyboardEventHandler = (event) => {
+    if (!inputValue) return;
+    switch (event.key) {
+      case 'Enter':
+      case 'Tab':
+        setChainsValue((prev) => [...prev, createOption(inputValue)]);
+        updateFormInput({ ...formInput, chains: [...formInput.chains, inputValue] })
+        setInputValue('');
+        event.preventDefault();
+    }
+  };
 
   async function init_did() {
     await signAndSubmitTransaction(
@@ -145,7 +173,6 @@ export default function Home() {
         pubkey,
         chains,
         addr_description,
-
       ],
     };
   }
@@ -174,7 +201,7 @@ export default function Home() {
       />
       <br></br>
       <br></br>
-      The type of DID Owner: &nbsp; &nbsp; &nbsp; &nbsp; 
+      The type of DID Owner: &nbsp; &nbsp; &nbsp; &nbsp;
       <select
         value={formInput.did_type}
         onChange={(e) => {
@@ -239,12 +266,41 @@ export default function Home() {
         }
       />
       <br></br>
-      <input
+      <CreatableSelect
+        components={components}
+        inputValue={inputValue}
+        isClearable
+        isMulti
+        menuIsOpen={false}
+        onChange={(newValue) => {
+          setChainsValue(newValue);
+          updateFormInput({ ...formInput, chains: newValue.map(x => x.value) })
+        }}
+        onInputChange={(newValue) => setInputValue(newValue)}
+        onKeyDown={handleKeyDown}
         placeholder="Chains"
-        className="mt-8 p-4 input input-bordered input-primary w-full"
-        onChange={(e) =>
-          updateFormInput({ ...formInput, chains: JSON.parse(e.target.value) })
-        }
+        value={chainsValue}
+        className="mt-8 input-primary w-full select-input"
+        styles={{
+          control: (_, state) => {
+            return {
+              // display
+              display: 'flex',
+              alignItems: 'center',
+              // height & width
+              width: '100%',
+              height: '3rem',
+              // outline
+              outline: state.isFocused ? '2px solid #570df8' : '0px',
+              outlineOffset: '3px',
+              // border & padding
+              borderRadius: '8px',
+              paddingLeft: '0.4rem',
+              // size
+              fontSize: '1rem',
+            }
+          },
+        }}
       />
       <br></br>
       <button
@@ -269,6 +325,6 @@ export default function Home() {
         }>
         Delete Addr
       </button>
-    </div>
+    </div >
   );
 }
