@@ -75,7 +75,7 @@ export default function Home() {
       .filter(item => item.type === PACKAGE_ID + "::devnet_nft::DevNetNFT")
       .map(item => item.objectId)
     const nftObjects = await provider.getObjectBatch(nft_ids)
-    const nfts = nftObjects.filter(item => item.status === "Exists").map(item => {
+    const nfts = nftObjects.filter(item => item.status === "Exists").map((item: any) => {
       return {
         id: item.details.data.fields.id.id,
         name: item.details.data.fields.name,
