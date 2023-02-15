@@ -1,5 +1,3 @@
-import { Token } from "./Token";
-
 export type Status = "ongoing" | "finished" | "revoked";
 
 export interface Offer {
@@ -10,5 +8,4 @@ export interface Offer {
   status: Status;
   createAt: Date;
   updateAt?: Date;
-  token: Token;
 }

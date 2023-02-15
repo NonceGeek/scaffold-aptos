@@ -13,6 +13,8 @@ export function NavBar() {
           <Image src="/logo.png" width={64} height={64} alt="logo" />
         </a>
         <ul className="menu menu-horizontal p-0 ml-5">
+          <NavItem href="/" title="Nft Sample" />
+          <NavItem href="/contract" title="Sample Contract" />
           {/* <NavItem href="/" title="AddrManager" />
           <NavItem href="/endpoint" title="ServiceManager" /> */}
           {/* <NavItem href="/did_querier" title="DIDQuerier" /> */}

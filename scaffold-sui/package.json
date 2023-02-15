@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@mysten/sui.js": "^0.22.0",
-    "@suiet/wallet-kit": "latest",
+    "@suiet/wallet-kit": "0.1.20",
     "@solana/web3.js": "^1.66.2",
     "@supabase/supabase-js": "^1.35.6",
     "@types/mime": "^3.0.1",
