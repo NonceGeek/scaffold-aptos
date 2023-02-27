@@ -74,23 +74,6 @@ export default function VerifyEthAddrBtn({resource_v2, addrIndex, address}: prop
         }
     }
 
-    const test_verify_eth_addr = async () => {
-        const signature = "0x5faa98bcaa18607b722e6e4da523451a410f23ac760c7871576f559686f5940f4dd2be9413b56efb4521138c3a83a95de72f97a89c45440c4c5d12f975fc1cba1b"
-        const address = "0x9a193f61a32121131EB671E53ce34A381Ec9AaDe"
-        const message = "62449562.1.4139eaf9a8f1ee32431e6d33876a8a4243be4b0d7fbf76f0cb0315ec92452369.5.nonce_geek"
-
-        const payload = {
-            type: 'script_payload',
-            function: DAPP_ADDRESS + '::eth_sig_verifier::verify_eth_sig',
-            type_arguments: [],
-            arguments: [signature, address, message],
-        }
-        const txn = await signAndSubmitTransaction(payload, { gas_unit_price: 100 });
-        console.log(txn);
-    }
-
-    test_verify_eth_addr();
-
     return (
         <>
         {render_button()}
