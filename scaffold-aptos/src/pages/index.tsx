@@ -20,13 +20,16 @@ import newAxios from "../utils/axios_utils";
 import React, { KeyboardEventHandler } from 'react';
 import CreatableSelect from 'react-select/creatable';
 
+import VerifyEthAddrBtn from "../components/VerifyEthAddrBtn";
+import VerifyAptosAddrBtn from "../components/VerifyAptAddrBtn";
+
 // import { TypeTagVector } from "@martiandao/aptos-web3-bip44.js/dist/aptos_types";
 // import {TypeTagParser} from "@martiandao/aptos-web3-bip44.js/dist/transaction_builder/builder_utils";
 export default function Home() {
   const { account, signAndSubmitTransaction } = useWallet();
   const client = new WalletClient(APTOS_NODE_URL, APTOS_FAUCET_URL);
   const [resource, setResource] = React.useState<MoveResource>();
-  const [resource_v2, setResourceV2] = React.useState();
+  const [resource_v2, setResourceV2] = React.useState<any>();
   const [formInput, updateFormInput] = useState<{
     did_type: number;
     description: string;
@@ -36,6 +39,7 @@ export default function Home() {
     pubkey: string;
     addr_description: string;
     chains: Array<string>;
+    expire_second: number;
   }>({
     did_type: 0,
     description: "",
@@ -45,6 +49,7 @@ export default function Home() {
     pubkey: "",
     addr_description: "",
     chains: [],
+    expire_second: 0,
   });
 
   const components = {
@@ -83,10 +88,11 @@ export default function Home() {
   }
 
   async function create_addr() {
-    await signAndSubmitTransaction(
+    const test = await signAndSubmitTransaction(
       add_addr(),
       { gas_unit_price: 100 }
     );
+    console.log(test);
   }
 
   async function del_addr() {
@@ -127,7 +133,7 @@ export default function Home() {
   async function get_did_resource_v2() {
     newAxios.post(
       '/api/v1/run?name=DID.Renderer&func_name=gen_did_document',
-      { "params": [account!.address!.toString()] },
+      { "params": [account!.address!.toString(), DAPP_ADDRESS] },
     ).then(
       value => {
         console.log(value.data)
@@ -162,7 +168,7 @@ export default function Home() {
   }
 
   function add_addr() {
-    const { description, resource_path, addr_type, addr, pubkey, addr_description, chains } = formInput;
+    const { description, resource_path, addr_type, addr, pubkey, addr_description, chains, expire_second } = formInput;
     return {
       type: "entry_function_payload",
       function: DAPP_ADDRESS + "::addr_aggregator::add_addr",
@@ -173,6 +179,7 @@ export default function Home() {
         pubkey,
         chains,
         addr_description,
+        expire_second,
       ],
     };
   }
@@ -188,6 +195,26 @@ export default function Home() {
       ],
     };
   }
+
+  const render_did_resource_v2 = () => {
+    let out_array = [];
+    const data = resource_v2.result.verification_methods;
+    for (let i = 0; i < data.length; i++) {
+      out_array.push(
+        <tr className="text-center" key={i}>
+          <th>{data[i].addr.substring(0, 10) + "..."}</th>
+          <td>{data[i].verificated.toString()}</td>
+          <td>{data[i].properties.chains}</td>
+          <td>{data[i].type}</td>
+          {data[i].addr.length === 42 ? 
+            <VerifyEthAddrBtn resource_v2={resource_v2} addrIndex={i} address={data[i].addr}/> : 
+            <VerifyAptosAddrBtn resource_v2={resource_v2} addrIndex={i} address={data[i].addr}/>
+          }
+        </tr>
+      );
+    }
+    return out_array;
+  };
 
   return (
     <div>
@@ -229,7 +256,22 @@ export default function Home() {
         Get DID Resource
       </button>
       {resource_v2 && (
-        <CodeBlock code={resource_v2} />
+        <div className="overflow-x-auto mt-2">
+          <h3 className="text-center font-bold">DID Resources</h3>
+          <table className="table table-compact w-full my-2">
+            <thead>
+              <tr className="text-center">
+                <th>Address</th>
+                <th>Verified</th>
+                <th>Chain</th>
+                <th>Signature Type</th>
+                <th>Action</th>
+                <th>Signature</th>
+              </tr>
+            </thead>
+            <tbody>{render_did_resource_v2()}</tbody>
+          </table>
+        </div>
       )}
       <br></br>
       <select
@@ -301,6 +343,13 @@ export default function Home() {
             }
           },
         }}
+      />
+      <input
+        placeholder="Expire Second"
+        className="mt-8 p-4 input input-bordered input-primary w-full"
+        onChange={(e) =>
+          updateFormInput({ ...formInput, expire_second: parseInt(e.target.value) })
+        }
       />
       <br></br>
       <button
