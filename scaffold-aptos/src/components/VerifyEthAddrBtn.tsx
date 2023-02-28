@@ -18,10 +18,11 @@ interface props {
     addrIndex: number,
     address: string, 
     verified: boolean,
+    get_addr_info: ()=>Promise<void>
 }
 
 
-export default function VerifyEthAddrBtn({addrInfo, addrIndex, address, verified}: props) {
+export default function VerifyEthAddrBtn({addrInfo, addrIndex, address, verified, get_addr_info}: props) {
     const [currentAccount, setCurrentAccount] = useState<string>();
     const { account, signAndSubmitTransaction } = useWallet();
     const [ msg, setMsg ] = useState<string>();
@@ -35,7 +36,7 @@ export default function VerifyEthAddrBtn({addrInfo, addrIndex, address, verified
     useEffect(() => {
         setMsg(addrInfo[addrIndex].msg);
     }, []);
-    
+
     const update_eth_addr = async () => {
         console.log(signature);
         console.log(address);
@@ -47,6 +48,7 @@ export default function VerifyEthAddrBtn({addrInfo, addrIndex, address, verified
         }
         const txn = await signAndSubmitTransaction(payload, { gas_unit_price: 100 });
         console.log(txn);
+        get_addr_info();
     }
 
     const render_button = () => {
