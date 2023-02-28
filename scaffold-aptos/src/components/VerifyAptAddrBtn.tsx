@@ -14,22 +14,26 @@ import { WalletClient } from "@martiandao/aptos-web3-bip44.js";
 import { APTOS_NODE_URL, APTOS_FAUCET_URL, ETH_SIGNER_URL, APTOS_SIGNER_URL } from "../config/constants";
 
 interface props {
-    resource_v2: any,
+    addrInfo: any,
     addrIndex: number,
     address: string, 
     verified: boolean,
 }
 
 
-export default function VerifyEthAddrBtn({resource_v2, addrIndex, address, verified}: props) {
+export default function VerifyEthAddrBtn({addrInfo, addrIndex, address, verified}: props) {
     const [currentAccount, setCurrentAccount] = useState<string>();
     const { account, signAndSubmitTransaction } = useWallet();
     const [ msg, setMsg ] = useState<string>();
     const client = new WalletClient(APTOS_NODE_URL, APTOS_FAUCET_URL);
     const [ signature, setSignature ] = useState<string>("");
 
+    // useEffect(() => {
+    //     setMsg(resource_v2.result.verification_methods[addrIndex].verification.msg);
+    // }, []);
+
     useEffect(() => {
-        setMsg(resource_v2.result.verification_methods[addrIndex].verification.msg);
+        setMsg(addrInfo[addrIndex].msg);
     }, []);
 
     const update_aptos_addr = async () => {

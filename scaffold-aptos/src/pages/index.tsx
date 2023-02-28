@@ -5,7 +5,7 @@ import {
 } from "../config/constants";
 import { useWallet } from "@manahippo/aptos-wallet-adapter";
 import { MoveResource } from "@martiandao/aptos-web3-bip44.js/dist/generated";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   AptosAccount,
   WalletClient,
@@ -30,6 +30,7 @@ export default function Home() {
   const client = new WalletClient(APTOS_NODE_URL, APTOS_FAUCET_URL);
   const [resource, setResource] = React.useState<MoveResource>();
   const [resource_v2, setResourceV2] = React.useState<any>();
+  const [addrInfo, setAddrInfo] = React.useState<Array<any>>([]);
   const [formInput, updateFormInput] = useState<{
     did_type: number;
     description: string;
@@ -102,56 +103,30 @@ export default function Home() {
     );
   }
 
-  async function get_resources() {
-    client.aptosClient.getAccountResources(account!.address!.toString()).then(value =>
-      console.log(value)
-    );
-  }
 
-  async function get_table() {
-    // client.aptosClient.getTableItem()
-  }
 
-  async function get_resource() {
-    const { description, resource_path, addr_type, addr, pubkey, addr_description, chains } = formInput;
-    console.log(client.aptosClient.getAccountResource(account!.address!.toString(), resource_path));
-  }
-
-  async function faas_test() {
-    newAxios.post(
-      '/api/v1/run?name=DID.Renderer&func_name=get_module_doc',
-      {
-        "params": [
-        ]
-      },
-    ).then(
-      value => {
-        console.log(value.data);
+  async function get_addr_info() {
+    if(account && account.address) {
+      const addr_aggregator: any = await client.aptosClient.getAccountResource(account.address.toString(), DAPP_ADDRESS + "::addr_aggregator::AddrAggregator");
+      // console.log(addr_aggregator);
+      if(addr_aggregator) {
+        const addresses: Array<string> = addr_aggregator.data.addrs;
+        const addr_infos_map_handle: string = addr_aggregator.data.addr_infos_map.handle;
+        // console.log(addresses);
+        // console.log(addr_infos_map_handle);
+        const out: Array<any> = [];
+        for(let i = 0; i < addresses.length; i++) {
+          const table_item = await client.aptosClient.getTableItem(addr_infos_map_handle, {
+            key_type: "0x1::string::String",
+            value_type: DAPP_ADDRESS + "::addr_info::AddrInfo",
+            key: addresses[i],
+          });
+          out.push(table_item);
+        }
+        console.log(out);
+        setAddrInfo(out);
       }
-    );
-  }
-  async function get_did_resource_v2() {
-    newAxios.post(
-      '/api/v1/run?name=DID.Renderer&func_name=gen_did_document',
-      { "params": [account!.address!.toString(), DAPP_ADDRESS] },
-    ).then(
-      value => {
-        console.log(value.data)
-        setResourceV2(value.data)
-      }
-    );
-  }
-
-  async function get_did_resource() {
-
-    client.aptosClient.getAccountResource(account!.address!.toString(), DAPP_ADDRESS + "::addr_aggregator::AddrAggregator").then(
-      setResource
-    );
-  }
-
-  function log_acct() {
-    console.log(resource)
-    console.log(account!.address!.toString());
+    }
   }
 
   function do_init_did() {
@@ -196,19 +171,22 @@ export default function Home() {
     };
   }
 
-  const render_did_resource_v2 = () => {
+  const render_addr_info = () => {
     let out_array = [];
-    const data = resource_v2.result.verification_methods;
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < addrInfo.length; i++) {
       out_array.push(
         <tr className="text-center" key={i}>
-          <th>{data[i].addr.substring(0, 10) + "..."}</th>
-          <td>{data[i].verificated.toString()}</td>
-          <td>{data[i].properties.chains}</td>
-          <td>{data[i].type}</td>
-          {data[i].addr.length === 42 ? 
-            <VerifyEthAddrBtn resource_v2={resource_v2} addrIndex={i} address={data[i].addr} verified={data[i].verificated}/> : 
-            <VerifyAptosAddrBtn resource_v2={resource_v2} addrIndex={i} address={data[i].addr} verified={data[i].verificated}/>
+          <th>{addrInfo[i].addr.substring(0, 10) + "..."}</th>
+          <td>{addrInfo[i].addr_type === "0" ? "ETH" : "APT"}</td>
+          <td>{addrInfo[i].chains}</td>
+          <td>{addrInfo[i].description.length > 20 ? addrInfo[i].description.substring(0, 20) : addrInfo[i].description}</td>
+          <td>{new Date(addrInfo[i].created_at * 1000).toLocaleString()}</td>
+          <td>{new Date(addrInfo[i].expired_at * 1000).toLocaleString()}</td>
+          <td>{addrInfo[i].updated_at === "0" ? "Never" : new Date(addrInfo[i].updated_at * 1000).toLocaleString()}</td>
+          <td>{addrInfo[i].signature !== "0x" ? "Yes" : "No"}</td>
+          {addrInfo[i].addr_type === "0" ? 
+            <VerifyEthAddrBtn addrInfo={addrInfo} addrIndex={i} address={addrInfo[i].addr} verified={addrInfo[i].signature !== "0x"}/> : 
+            <VerifyAptosAddrBtn addrInfo={addrInfo} addrIndex={i} address={addrInfo[i].addr} verified={addrInfo[i].signature !== "0x"}/>
           }
         </tr>
       );
@@ -249,27 +227,31 @@ export default function Home() {
       <br></br>
       <br></br>
       <button
-        onClick={get_did_resource_v2}
+        onClick={get_addr_info}
         className={
           "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
         }>
         Get DID Resource
       </button>
-      {resource_v2 && (
+      {addrInfo && (
         <div className="overflow-x-auto mt-2">
           <h3 className="text-center font-bold">DID Resources</h3>
           <table className="table table-compact w-full my-2">
             <thead>
               <tr className="text-center">
                 <th>Address</th>
+                <th>Address Type</th>
+                <th>Chain(s)</th>
+                <th>Description</th>
+                <th>Created At</th>
+                <th>Expire At</th>
+                <th>Updated At</th>
                 <th>Verified</th>
-                <th>Chain</th>
-                <th>Signature Type</th>
                 <th>Action</th>
                 <th>Signature</th>
               </tr>
             </thead>
-            <tbody>{render_did_resource_v2()}</tbody>
+            <tbody>{render_addr_info()}</tbody>
           </table>
         </div>
       )}
@@ -377,3 +359,75 @@ export default function Home() {
     </div >
   );
 }
+
+
+
+  // useEffect(()=>{get_addr_info()}, [account]);
+
+  // async function get_table() {
+  //   // client.aptosClient.getTableItem()
+  // }
+
+  // async function get_resource() {
+  //   const { description, resource_path, addr_type, addr, pubkey, addr_description, chains } = formInput;
+  //   console.log(client.aptosClient.getAccountResource(account!.address!.toString(), resource_path));
+  // }
+
+  // async function faas_test() {
+  //   newAxios.post(
+  //     '/api/v1/run?name=DID.Renderer&func_name=get_module_doc',
+  //     {
+  //       "params": [
+  //       ]
+  //     },
+  //   ).then(
+  //     value => {
+  //       console.log(value.data);
+  //     }
+  //   );
+  // }
+  // async function get_did_resource_v2() {
+  //   newAxios.post(
+  //     '/api/v1/run?name=DID.Renderer&func_name=gen_did_document',
+  //     { "params": [account!.address!.toString(), DAPP_ADDRESS] },
+  //   ).then(
+  //     value => {
+  //       console.log(value.data)
+  //       setResourceV2(value.data)
+  //     }
+  //   );
+  // }
+
+  // async function get_did_resource() {
+
+  //   client.aptosClient.getAccountResource(account!.address!.toString(), DAPP_ADDRESS + "::addr_aggregator::AddrAggregator").then(
+  //     setResource
+  //   );
+  // }
+
+
+  // function log_acct() {
+  //   console.log(resource)
+  //   console.log(account!.address!.toString());
+  // }
+
+  
+  // const render_did_resource_v2 = () => {
+  //   let out_array = [];
+  //   const data = resource_v2.result.verification_methods;
+  //   for (let i = 0; i < data.length; i++) {
+  //     out_array.push(
+  //       <tr className="text-center" key={i}>
+  //         <th>{data[i].addr.substring(0, 10) + "..."}</th>
+  //         <td>{data[i].verificated.toString()}</td>
+  //         <td>{data[i].properties.chains}</td>
+  //         <td>{data[i].type}</td>
+  //         {data[i].addr.length === 42 ? 
+  //           <VerifyEthAddrBtn resource_v2={resource_v2} addrIndex={i} address={data[i].addr} verified={data[i].verificated}/> : 
+  //           <VerifyAptosAddrBtn resource_v2={resource_v2} addrIndex={i} address={data[i].addr} verified={data[i].verificated}/>
+  //         }
+  //       </tr>
+  //     );
+  //   }
+  //   return out_array;
+  // };
