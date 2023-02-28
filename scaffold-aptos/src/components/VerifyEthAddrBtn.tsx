@@ -17,10 +17,11 @@ interface props {
     resource_v2: any,
     addrIndex: number,
     address: string, 
+    verified: boolean,
 }
 
 
-export default function VerifyEthAddrBtn({resource_v2, addrIndex, address}: props) {
+export default function VerifyEthAddrBtn({resource_v2, addrIndex, address, verified}: props) {
     const [currentAccount, setCurrentAccount] = useState<string>();
     const { account, signAndSubmitTransaction } = useWallet();
     const [ msg, setMsg ] = useState<string>();
@@ -45,31 +46,71 @@ export default function VerifyEthAddrBtn({resource_v2, addrIndex, address}: prop
     }
 
     const render_button = () => {
-        if(address && signature !== "") {
-            return (
-                <td>
-                    <button className={
-                        "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
-                    } onClick={update_eth_addr}>
-                        Verify ETH Signature 
-                    </button>
-                </td>
-            )
-        } else {
-            return (
-                <td>
-                    <button className={
-                        "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
-                    }>
-                        <a 
-                            href={ETH_SIGNER_URL + msg}
-                            target="_blank"
-                        >
-                            Generate ETH Signature
-                        </a>
-                    </button>
-                </td>
-            )
+        if(address) { // only render if address exists
+            if(verified) { // if verified already, disable button input
+                return(
+                    <>
+                    <td>
+                        <button className={
+                            "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+                        } disabled={true}>
+                            No Action Available
+                        </button>
+                    </td>
+                    <td>
+                        <input
+                            placeholder="ETH signature verified"
+                            className="mt-8 p-4 input input-bordered input-primary w-full"
+                        />
+                    </td>
+                    </>
+                )
+            } else { // if not verified
+                if(signature !== "") { // if signature is filled, enable verification button
+                    return (
+                        <>
+                        <td>
+                            <button className={
+                                "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+                            } onClick={update_eth_addr}>
+                                Verify ETH Signature 
+                            </button>
+                        </td>
+                        <td>
+                            <input
+                                placeholder="Paste generated signature here"
+                                className="mt-8 p-4 input input-bordered input-primary w-full"
+                                onChange={(e) => setSignature(e.target.value)}
+                            />
+                        </td>
+                        </>
+                    )
+                } else { // if signature is not filled, enable generate signature button
+                    return (
+                        <>
+                        <td>
+                            <button className={
+                                "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+                            }>
+                                <a 
+                                    href={ETH_SIGNER_URL + msg}
+                                    target="_blank"
+                                >
+                                    Generate ETH Signature
+                                </a>
+                            </button>
+                        </td>
+                        <td>
+                            <input
+                                placeholder="Paste generated signature here"
+                                className="mt-8 p-4 input input-bordered input-primary w-full"
+                                onChange={(e) => setSignature(e.target.value)}
+                            />
+                        </td>
+                        </>
+                    )
+                }
+            }
         }
     }
 
@@ -93,13 +134,6 @@ export default function VerifyEthAddrBtn({resource_v2, addrIndex, address}: prop
     return (
         <>
         {render_button()}
-        <td>
-            <input
-                placeholder="Paste generated signature here"
-                className="mt-8 p-4 input input-bordered input-primary w-full"
-                onChange={(e) => setSignature(e.target.value)}
-            />
-        </td>
         </>
     );
 }

@@ -207,8 +207,8 @@ export default function Home() {
           <td>{data[i].properties.chains}</td>
           <td>{data[i].type}</td>
           {data[i].addr.length === 42 ? 
-            <VerifyEthAddrBtn resource_v2={resource_v2} addrIndex={i} address={data[i].addr}/> : 
-            <VerifyAptosAddrBtn resource_v2={resource_v2} addrIndex={i} address={data[i].addr}/>
+            <VerifyEthAddrBtn resource_v2={resource_v2} addrIndex={i} address={data[i].addr} verified={data[i].verificated}/> : 
+            <VerifyAptosAddrBtn resource_v2={resource_v2} addrIndex={i} address={data[i].addr} verified={data[i].verificated}/>
           }
         </tr>
       );
