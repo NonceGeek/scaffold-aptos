@@ -31,6 +31,7 @@ export default function Home() {
   const [resource, setResource] = React.useState<MoveResource>();
   const [resource_v2, setResourceV2] = React.useState<any>();
   const [addrInfo, setAddrInfo] = React.useState<Array<any>>([]);
+  const [hasAddrAggregator, setHasAddrAggregator] = React.useState<boolean>(false);
   const [formInput, updateFormInput] = useState<{
     did_type: number;
     description: string;
@@ -194,38 +195,58 @@ export default function Home() {
     return out_array;
   };
 
+  async function check_addr_aggregator() {
+    if(account && account.address) {
+      try {
+        const addr_aggregator: any = await client.aptosClient.getAccountResource(account.address.toString(), DAPP_ADDRESS + "::addr_aggregator::AddrAggregator");
+        console.log(addr_aggregator);
+        setHasAddrAggregator(true);
+      } catch(err) {
+        console.log(err);
+        setHasAddrAggregator(false);     
+      }
+    }
+    setHasAddrAggregator(false);
+  }
+
+  useEffect(() => {check_addr_aggregator()}, [account])
+
   return (
     <div>
       <p><b>Module Path:</b> {DAPP_ADDRESS}::addr_aggregator</p>
-      <input
-        placeholder="Description for your DID"
-        className="mt-8 p-4 input input-bordered input-primary w-full"
-        onChange={(e) =>
-          updateFormInput({ ...formInput, description: e.target.value })
-        }
-      />
-      <br></br>
-      <br></br>
-      The type of DID Owner: &nbsp; &nbsp; &nbsp; &nbsp;
-      <select
-        value={formInput.did_type}
-        onChange={(e) => {
-          updateFormInput({ ...formInput, did_type: parseInt(e.target.value) })
-        }}
-      >
-        <option value="0">Individual</option>
-        <option value="1">DAO</option>
-      </select>
-      <br></br>
-      <button
-        onClick={init_did}
-        className={
-          "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
-        }>
-        Init Your DID
-      </button> &nbsp; &nbsp; &nbsp; &nbsp; 💡 INIT Your DID on Aptos before the other Operations!
-      <br></br>
-      <br></br>
+      {hasAddrAggregator && (
+        <>
+          <input
+            placeholder="Description for your DID"
+            className="mt-8 p-4 input input-bordered input-primary w-full"
+            onChange={(e) =>
+              updateFormInput({ ...formInput, description: e.target.value })
+            }
+          />
+          <br></br>
+          <br></br>
+          The type of DID Owner: &nbsp; &nbsp; &nbsp; &nbsp;
+          <select
+            value={formInput.did_type}
+            onChange={(e) => {
+              updateFormInput({ ...formInput, did_type: parseInt(e.target.value) })
+            }}
+          >
+            <option value="0">Individual</option>
+            <option value="1">DAO</option>
+          </select>
+          <br></br>
+          <button
+            onClick={init_did}
+            className={
+              "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+            }>
+            Init Your DID
+          </button> &nbsp; &nbsp; &nbsp; &nbsp; 💡 INIT Your DID on Aptos before the other Operations!
+          <br></br>
+          <br></br>
+        </>
+      )}
       <button
         onClick={get_addr_info}
         className={
@@ -247,7 +268,7 @@ export default function Home() {
                 <th>Expire At</th>
                 <th>Updated At</th>
                 <th>Verified</th>
-                <th>Action</th>
+                <th>Verify</th>
                 <th>Signature</th>
               </tr>
             </thead>
