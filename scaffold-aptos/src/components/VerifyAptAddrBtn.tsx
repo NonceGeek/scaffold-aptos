@@ -44,7 +44,7 @@ export default function VerifyEthAddrBtn({addrInfo, addrIndex, address, verified
             type: 'entry_function_payload',
             function: DAPP_ADDRESS + '::addr_aggregator::update_aptos_addr',
             type_arguments: [],
-            arguments: [address, signature, "APTOS\nmessage: " + msg + "\nnonce: random_string_change"],
+            arguments: [address, signature, "APTOS\nmessage: " + msg + "\nnonce: random_string_may_change_as_nonce"],
         }
         const txn = await signAndSubmitTransaction(payload, { gas_unit_price: 100 });
         console.log(txn);
