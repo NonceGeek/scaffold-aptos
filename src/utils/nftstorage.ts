@@ -21,8 +21,8 @@ export class NFTStorageClient {
   private convertGatewayURL(ipfsURL: string) {
     if (ipfsURL.startsWith("ipfs:"))
       return (
-        "https://nftstorage.link/ipfs/" +
-        new URL(ipfsURL).pathname.replace(/^\/\//, "")
+        `https://nftstorage.link/ipfs/${ 
+        new URL(ipfsURL).pathname.replace(/^\/\//, "")}`
       );
     return ipfsURL;
   }
@@ -33,8 +33,8 @@ export class NFTStorageClient {
   }
 
   async getImageURL(tokenURL: string) {
-    let gatewayURL = this.convertGatewayURL(tokenURL);
-    let image = (await axios.get(gatewayURL)).data.image;
+    const gatewayURL = this.convertGatewayURL(tokenURL);
+    const image = (await axios.get(gatewayURL)).data.image;
     return this.convertGatewayURL(image);
   }
 }

@@ -11,4 +11,4 @@ export const APTOS_FAUCET_URL = "https://faucet.devnet.aptoslabs.com/v1/";
 
 export const NETWORK=process.env.NEXT_PUBLIC_APTOS_NETWORK!;
 
-export const MODULE_URL="https://explorer.aptoslabs.com/account/" + DAPP_ADDRESS + "/modules?network=" + NETWORK
+export const MODULE_URL=`https://explorer.aptoslabs.com/account/${  DAPP_ADDRESS  }/modules?network=${  NETWORK}`

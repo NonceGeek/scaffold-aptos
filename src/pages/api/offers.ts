@@ -5,7 +5,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  let { data: offers, error } = await supabase
+  const { data: offers, error } = await supabase
     .from("offers")
     .select("id,buyer,seller,price,status,createAt,updateAt,token:tokens(*)")
     .eq("status", "ongoing");
