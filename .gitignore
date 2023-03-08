@@ -103,5 +103,9 @@ dist
 # TernJS port file
 .tern-port
 
+<<<<<<< HEAD
 # eth file
 Web3ModalSetup
+=======
+.DS_Store
+>>>>>>> main
