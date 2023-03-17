@@ -221,12 +221,13 @@ export default function Home() {
     const { addr, chains, addr_description } = updateAddrInput;
     return {
       type: "entry_function_payload",
-      function: DAPP_ADDRESS + "::addr_aggregator::update_addr_info_with_chains_and_description",
+      function: DAPP_ADDRESS + "::addr_aggregator::update_addr_info_with_chains_and_description_and_expired_at",
       type_arguments: [],
       arguments: [
         addr,
         chains,
         addr_description,
+        0
       ],
     };
   }
@@ -304,7 +305,7 @@ export default function Home() {
   }
 
   useEffect(() => {check_addr_aggregator()}, [account])
-  useEffect(() => {console.log(hasAddrAggregator)}, [hasAddrAggregator])
+  useEffect(() => {console.log("has_addr: " + hasAddrAggregator)}, [hasAddrAggregator])
 
   // useEffect(() => {console.log("has aggregator:" + hasAddrAggregator)}, [hasAddrAggregator])
   // useEffect(() => {console.log("has account:" + account)}, [account])
@@ -363,6 +364,7 @@ export default function Home() {
             <thead>
               <tr className="text-center">
                 <th>Address</th>
+                {/* TODO: Need to Copiable */}
                 <th>Address Type</th>
                 <th>Chain(s)</th>
                 <th>Description</th>

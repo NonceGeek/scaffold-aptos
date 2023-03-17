@@ -96,34 +96,34 @@ export default function Home() {
   //   };
   // }
 
-  const render_services = () => {
-    let context_table = [];
-    for (let i = 0; i < services.length; i++) {
-      console.log(services[i]);
-      context_table.push(
-        <tr className="text-center" key={i}>
-          <th>{services[i].name}</th>
-          <td>{services[i].description}</td>
-          <td>
-            <a href={services[i].url} target="_blank" rel="noreferrer">
-              <p class="underline">{services[i].url} </p>
-            </a>
-          </td>
-          <td>
-            <a href={services[i].verification_url} target="_blank" rel="noreferrer">
-              <p class="underline">{services[i].verification_url} </p>
-            </a>
-          </td>
-          <td>{services[i].expired_at}</td>
-          <td>
-            <button>LOAD</button>
-          </td>
-          {/* TODO: a btn to load data to the params in below input table */}
-        </tr>
-      );
-    }
-    return context_table;
-  };
+  // const render_services = () => {
+  //   let context_table = [];
+  //   for (let i = 0; i < services.length; i++) {
+  //     console.log(services[i]);
+  //     context_table.push(
+  //       <tr className="text-center" key={i}>
+  //         <th>{services[i].name}</th>
+  //         <td>{services[i].description}</td>
+  //         <td>
+  //           <a href={services[i].url} target="_blank" rel="noreferrer">
+  //             <p class="underline">{services[i].url} </p>
+  //           </a>
+  //         </td>
+  //         <td>
+  //           <a href={services[i].verification_url} target="_blank" rel="noreferrer">
+  //             <p class="underline">{services[i].verification_url} </p>
+  //           </a>
+  //         </td>
+  //         <td>{services[i].expired_at}</td>
+  //         <td>
+  //           <button class="btn btn-blue">LOAD</button>
+  //         </td>
+  //         {/* TODO: a btn to load data to the params in below input table */}
+  //       </tr>
+  //     );
+  //   }
+  //   return context_table;
+  // };
   async function check_service_aggregator() {
     if (account && account.address) {
       try {
@@ -188,9 +188,10 @@ export default function Home() {
   useEffect(() => {
     console.log(services);
   }, [services]);
+
   async function init_did() {
     await signAndSubmitTransaction(do_init_did(), { gas_unit_price: 100 }).then(() => {
-      get_services();
+      setTimeout(get_services, 3000);
     });
   }
 
@@ -258,7 +259,7 @@ export default function Home() {
                   </td>
                   <td>{service.expired_at}</td>
                   <td>
-                    <button onClick={() => load_service(service)}>LOAD</button>
+                    <button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" onClick={() => load_service(service)}>LOAD</button>
                   </td>
                 </tr>
               );
