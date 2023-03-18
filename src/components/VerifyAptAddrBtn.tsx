@@ -38,9 +38,10 @@ export default function VerifyEthAddrBtn({addrInfo, addrIndex, address, verified
     }, []);
 
     const update_aptos_addr = async () => {
+        setMsg(addrInfo[addrIndex].msg);
         console.log(signature);
         console.log(address);
-        console.log(msg);
+        console.log("update_aptos_addr::msg" + msg);
         const payload = {
             type: 'entry_function_payload',
             function: DAPP_ADDRESS + '::addr_aggregator::update_aptos_addr',

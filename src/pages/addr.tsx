@@ -25,6 +25,9 @@ import VerifyAptosAddrBtn from "../components/VerifyAptAddrBtn";
 
 // import { TypeTagVector } from "@martiandao/aptos-web3-bip44.js/dist/aptos_types";
 // import {TypeTagParser} from "@martiandao/aptos-web3-bip44.js/dist/transaction_builder/builder_utils";
+
+// TODO: downcase the tags input
+
 export default function Home() {
   const { account, signAndSubmitTransaction, connected } = useWallet();
   const client = new WalletClient(APTOS_NODE_URL, APTOS_FAUCET_URL);
@@ -344,6 +347,14 @@ export default function Home() {
             Init Your DID
           </button> &nbsp; &nbsp; &nbsp; &nbsp; 💡 INIT Your DID on Aptos before the other Operations!
           <br></br>
+          <button
+            onClick={get_addr_info}
+            className={
+              "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+            }>
+            Refresh DID Resources
+          </button>
+
           <br></br>
         </>
       )}

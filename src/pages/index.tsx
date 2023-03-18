@@ -304,9 +304,26 @@ export default function Home() {
           </button>{' '}
           &nbsp; &nbsp; &nbsp; &nbsp; 💡 INIT Your DID on Aptos before the other Operations!
           <br></br>
+          <button
+            onClick={get_services}
+            className={
+              "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+            }>
+            Refresh the Services Info
+          </button>
           <br></br>
         </>
       )}
+      {hasAddrAggregator &&
+        <button
+          onClick={get_services}
+          className={
+            "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+          }>
+           Refresh the Services Info
+        </button>
+      }
+
       {hasAddrAggregator && (
         <div className="overflow-x-auto mt-2">
           {services.length > 0 && (
