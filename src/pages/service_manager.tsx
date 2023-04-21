@@ -18,15 +18,15 @@ export default function Home() {
   // const [resource, setResource] = React.useState<MoveResource>();
   const [formInput, updateFormInput] = useState<{
     name: string;
-    github_acct: string;
+    url: string;
     description: string;
-    gist_id: string;
+    verification_url: string;
     expired_at: number;
   }>({
-    name: 'github',
-    github_acct: '',
-    description: 'my github account.',
-    gist_id: '',
+    name: '',
+    url: '',
+    description: '',
+    verification_url: '',
     expired_at: 0,
   });
 
@@ -38,14 +38,12 @@ export default function Home() {
   }
 
   function do_add_service() {
-    const { name, description, github_acct, gist_id, expired_at } = formInput;
-    let github_url = "https://github.com/" + github_acct;
-    let gist_url = "https://gist.github.com/" + github_acct + "/" + gist_id;
+    const { name, description, url, verification_url, expired_at } = formInput;
     return {
       type: 'entry_function_payload',
       function: DAPP_ADDRESS + '::service_aggregator::add_service',
       type_arguments: [],
-      arguments: [name, description, github_url, gist_url, "", expired_at],
+      arguments: [name, description, url, verification_url, "", expired_at],
     };
   }
 
@@ -57,14 +55,12 @@ export default function Home() {
   }
 
   function do_update_service() {
-    const { name, description, github_acct, gist_id, expired_at } = formInput;
-    let github_url = "https://github.com/" + github_acct;
-    let gist_url = "https://gist.github.com/" + github_acct + "/" + gist_id;
+    const { name, description, url, verification_url, expired_at } = formInput;
     return {
       type: 'entry_function_payload',
       function: DAPP_ADDRESS + '::service_aggregator::update_service',
       type_arguments: [],
-      arguments: [name, description, github_url, gist_url, "", expired_at],
+      arguments: [name, description, url, verification_url, "", expired_at],
     };
   }
 
@@ -90,6 +86,44 @@ export default function Home() {
   //   console.log(account!.address!.toString());
   // }
 
+  // function init_service_aggr() {
+  //   return {
+  //     type: "entry_function_payload",
+  //     function: DAPP_ADDRESS + "::service_aggregator::create_service_aggregator",
+  //     type_arguments: [],
+  //     arguments: [
+  //     ],
+  //   };
+  // }
+
+  // const render_services = () => {
+  //   let context_table = [];
+  //   for (let i = 0; i < services.length; i++) {
+  //     console.log(services[i]);
+  //     context_table.push(
+  //       <tr className="text-center" key={i}>
+  //         <th>{services[i].name}</th>
+  //         <td>{services[i].description}</td>
+  //         <td>
+  //           <a href={services[i].url} target="_blank" rel="noreferrer">
+  //             <p class="underline">{services[i].url} </p>
+  //           </a>
+  //         </td>
+  //         <td>
+  //           <a href={services[i].verification_url} target="_blank" rel="noreferrer">
+  //             <p class="underline">{services[i].verification_url} </p>
+  //           </a>
+  //         </td>
+  //         <td>{services[i].expired_at}</td>
+  //         <td>
+  //           <button class="btn btn-blue">LOAD</button>
+  //         </td>
+  //         {/* TODO: a btn to load data to the params in below input table */}
+  //       </tr>
+  //     );
+  //   }
+  //   return context_table;
+  // };
   async function check_service_aggregator() {
     if (account && account.address) {
       try {
@@ -225,7 +259,7 @@ export default function Home() {
                   </td>
                   <td>{service.expired_at}</td>
                   <td>
-                    <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" onClick={() => load_service(service)}>LOAD</button>
+                    <button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" onClick={() => load_service(service)}>LOAD</button>
                   </td>
                 </tr>
               );
@@ -236,28 +270,22 @@ export default function Home() {
   };
   const load_service = (service: any) => {
     const { name, description, url, verification_url, expired_at } = service;
-    let arr_url = url.split("/");
-    let github_acct = arr_url[arr_url.length - 1];
-    let arr_verification_url = verification_url.split("/");
-    let gist_id = arr_verification_url[arr_verification_url.length - 1];
-    const loadInput = { name, description, github_acct, gist_id, expired_at };
+    const loadInput = { name, description, url, verification_url, expired_at };
     updateFormInput({ ...loadInput });
   };
   return (
     <div>
-      <center>
       <p>
         <b>Module Path: </b>
         <a target="_blank" href={MODULE_URL} class="underline">
           {DAPP_ADDRESS}::service_aggregator
         </a>
       </p>
-
       {!hasAddrAggregator && (
         <>
           <input
             placeholder="Description for your DID"
-            className="mt-8 p-4 input input-bordered input-primary w-1/2"
+            className="mt-8 p-4 input input-bordered input-primary w-full"
             onChange={(e) => setAddAddrInput({ ...addAddrInput, description: e.target.value })}
           />
           <br></br>
@@ -310,70 +338,41 @@ export default function Home() {
         </div>
       )}
       <br></br>
-
       <input
         placeholder="service Name"
-        className="mt-8 p-4 input input-bordered input-primary w-1/4"
+        className="mt-8 p-4 input input-bordered input-primary w-full"
         onChange={(e) => updateFormInput({ ...formInput, name: e.target.value })}
         value={formInput.name}
       />
       <br></br>
       <input
         placeholder="service Description"
-        className="mt-8 p-4 input input-bordered input-primary w-1/4"
+        className="mt-8 p-4 input input-bordered input-primary w-full"
         onChange={(e) => updateFormInput({ ...formInput, description: e.target.value })}
         value={formInput.description}
       />
       <br></br>
-      <br></br>
-      <br></br>
-      <div className="inline-flex relative mr-3 formkit-field">
-        <p>https://github.com/</p>
-        <input
-          placeholder="github account"
-          className="p-4 input input-bordered input-primary ml-2"
-          onChange={(e) => updateFormInput({ ...formInput, github_acct: e.target.value })}
-          value={formInput.github_acct}
-        />
-      </div>
-      <br></br>
-      <br></br>
-      <div className="inline-flex relative mr-3 formkit-field">
-        <a href="https://docs.movedid.build/guides-for-the-scenarios-of-move-did/bind-github-and-movedid/" target="_blank">
-          <p class="underline">💡 How can I create a gist to verify my github acct?</p>
-        </a>
-      </div>
-      <br></br>
-      <div className="inline-flex relative mr-3 formkit-field">
-        <a href="https://gist.github.com" target="_blank">
-          <button className={'btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg'}>
-            Create a gist!
-          </button>
-        </a>
-      </div>
-      <br></br>
-      <br></br>
-      <div className="inline-flex relative mr-3 formkit-field w-1/4">
-        <p>https://gist.github.com/{formInput.github_acct}/</p>
       <input
-        placeholder="gist Verification URL"
-        className="p-4 input input-bordered input-primary w-full ml-2"
-        onChange={(e) => updateFormInput({ ...formInput, gist_id: e.target.value })}
-        value={formInput.gist_id}
+        placeholder="service URL"
+        className="mt-8 p-4 input input-bordered input-primary w-full"
+        onChange={(e) => updateFormInput({ ...formInput, url: e.target.value })}
+        value={formInput.url}
       />
-      </div>
       <br></br>
-      <br></br>
-      <div className="inline-flex relative mr-3 formkit-field">
-        <p>0 means never expire: </p>
       <input
-        placeholder="expired at"
-        className="p-4 input input-bordered input-primary ml-2"
+        placeholder="service Verification URL(Optional)"
+        className="mt-8 p-4 input input-bordered input-primary w-full"
+        onChange={(e) => updateFormInput({ ...formInput, verification_url: e.target.value })}
+        value={formInput.verification_url}
+      />
+      <br></br>
+      <input
+        // placeholder="service Verification URL(Optional)"
+        className="mt-8 p-4 input input-bordered input-primary w-full"
         onChange={(e) => updateFormInput({ ...formInput, expired_at: parseInt(e.target.value) })}
-        placeholder="0"
+        placeholder="33229411200"
         value={formInput.expired_at}
       />
-      </div>
       <br></br>
       <button onClick={add_service} className={'btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg'}>
         Add Service
@@ -385,15 +384,13 @@ export default function Home() {
       <br></br>
       <input
         placeholder="service Name"
-        className="mt-8 p-4 input input-bordered input-primary w-1/4"
+        className="mt-8 p-4 input input-bordered input-primary w-full"
         onChange={(e) => updateFormInput({ ...formInput, name: e.target.value })}
-        value={formInput.name}
       />
       <br></br>
       <button onClick={delete_service} className={'btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg'}>
         Delete Service
       </button>
-      </center>
     </div>
   );
 }

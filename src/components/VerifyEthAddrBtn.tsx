@@ -38,8 +38,8 @@ export default function VerifyEthAddrBtn({addrInfo, addrIndex, address, verified
     }, []);
 
     const update_eth_addr = async () => {
-        console.log(signature);
-        console.log(address);
+        console.log("signature:" + signature);
+        console.log("address:" + address);
         const payload = {
             type: 'entry_function_payload',
             function: DAPP_ADDRESS + '::addr_aggregator::update_eth_addr',

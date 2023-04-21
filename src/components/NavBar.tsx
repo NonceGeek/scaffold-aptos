@@ -13,11 +13,12 @@ export function NavBar() {
           <Image src="/logo.png" width={64} height={64} alt="logo" />
         </a>
         <ul className="menu menu-horizontal p-0 ml-5">
-          
-          <NavItem href="/" title="ServiceManager" />
+          <NavItem href="/" title="GithubBinder" />
+          <NavItem href="/service_manager" title="ServiceManager" />
           <NavItem href="/service_events" title="ServiceEvents" />
-          <NavItem href="/addr" title="AddrManager" />
+          {/* <NavItem href="/addr" title="AddrManager" />
           <NavItem href="/addr_events" title="AddrEvents" />
+          <NavItem href="/create_did_events" title="CreateDIDEvents" /> */}
           {/* <NavItem href="/did_querier" title="DIDQuerier" /> */}
           <li className="font-sans font-semibold text-lg">
             <a href="https://github.com/NonceGeek/MoveDID/tree/main/did-aptos" target="_blank">Source Code</a>

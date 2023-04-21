@@ -1,7 +1,8 @@
 // import { DAPP_ADDRESS, MODULE_NAME, MODULE_URL, APTOS_NODE_URL } from '../config/constants';
 import {
     DAPP_ADDRESS,
-    APTOS_NODE_URL
+    APTOS_NODE_URL,
+    NETWORK
   } from "../config/constants";
 import { useWallet } from '@manahippo/aptos-wallet-adapter';
 import { useEffect, useState } from 'react';
@@ -11,9 +12,9 @@ import { AptosAccount, AptosClient, BCS, HexString } from 'aptos';
 // TODO: get_service after connect the wallet.
 
 export default function Home() {
-    const { account, signAndSubmitTransaction } = useWallet();
+    const { account, _signAndSubmitTransaction } = useWallet();
 
-    const [addServiceEvents, setAddServiceEvents] = useState<
+    const [addAddrEvents, setAddAddrEvents] = useState<
         Array<{
             name: string;
             description: string;
@@ -59,10 +60,10 @@ export default function Home() {
         try {
             await client.getEventsByEventHandle(
                 account!.address!.toString(),
-                DAPP_ADDRESS + '::service_aggregator::ServiceAggregator',
-                'add_service_events'
+                DAPP_ADDRESS + '::service_aggregator::AddrAggregator',
+                'add_addr_events'
             ).then((events) => {
-                console.log(events);
+                console.log("add_addr_events" + events);
                 const data = events.map((event) => {
                     return event.data;
                 });
@@ -170,10 +171,17 @@ export default function Home() {
     return (
         
         <div className=" p-4 w-[60%] m-auto flex flex-wrap shadow-2xl opacity-80 mb-10 justify-center ">
+            { (account) && (
+                <h3><b>Events Owner(TODO: add link here):</b> 
+                    <a href={"https://explorer.aptoslabs.com/account/" + "test" + "/modules?network=" + NETWORK} target="_blank">{account.address}</a>
+                </h3>
+            )}
+            
             {/* add_service_events */}
             {addServiceEvents && (
                 <div className="overflow-x-auto mt-2">
                     <h3 className="text-center font-bold">service_aggregator::ServiceAggregator.add_service_events</h3>
+                    
                     <table className="table table-compact w-full my-2">
                     <thead>
                         <tr className="text-center">
@@ -194,6 +202,7 @@ export default function Home() {
             {updateServiceEvents && (
                 <div className="overflow-x-auto mt-2">
                     <h3 className="text-center font-bold">service_aggregator::ServiceAggregator.update_service_events</h3>
+                    
                     <table className="table table-compact w-full my-2">
                     <thead>
                         <tr className="text-center">
@@ -213,6 +222,7 @@ export default function Home() {
             {deleteServiceEvents && (
                 <div className="overflow-x-auto mt-2">
                     <h3 className="text-center font-bold">service_aggregator::ServiceAggregator.delete_service_events</h3>
+                    
                     <table className="table table-compact w-full my-2">
                     <thead>
                         <tr className="text-center">
