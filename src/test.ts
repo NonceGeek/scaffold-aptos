@@ -31,11 +31,11 @@ import { AptosAccount,  AptosAccountObject} from "aptos";
   // const msg = "0.1.0000000000000000000000000000000000000000000000000000000000000123.1.nonce_geek";
 
   const textEncoder = new TextEncoder();
-  let str_bytes = textEncoder.encode(msg);
+  const styBytes = textEncoder.encode(msg);
 
   console.log("Alice pubkey -------- ", alice.pubKey());
 
-  let signature = alice.signBuffer(str_bytes);
+  const signature = alice.signBuffer(styBytes);
   console.log("signature -------- ", signature);
 
 })();

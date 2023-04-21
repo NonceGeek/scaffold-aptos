@@ -248,7 +248,7 @@ export default function Home() {
       <center>
       <p>
         <b>Module Path: </b>
-        <a target="_blank" href={MODULE_URL} class="underline">
+        <a target="_blank" href={MODULE_URL} className="underline">
           {DAPP_ADDRESS}::service_aggregator
         </a>
       </p>
@@ -340,7 +340,7 @@ export default function Home() {
       <br></br>
       <div className="inline-flex relative mr-3 formkit-field">
         <a href="https://docs.movedid.build/guides-for-the-scenarios-of-move-did/bind-github-and-movedid/" target="_blank">
-          <p class="underline">💡 How can I create a gist to verify my github acct?</p>
+          <p className="underline">💡 How can I create a gist to verify my github acct?</p>
         </a>
       </div>
       <br></br>
@@ -370,7 +370,7 @@ export default function Home() {
         placeholder="expired at"
         className="p-4 input input-bordered input-primary ml-2"
         onChange={(e) => updateFormInput({ ...formInput, expired_at: parseInt(e.target.value) })}
-        placeholder="0"
+
         value={formInput.expired_at}
       />
       </div>

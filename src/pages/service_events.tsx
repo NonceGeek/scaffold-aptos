@@ -118,8 +118,8 @@ export default function Home() {
                 <tr className="text-center">
                     <th>{data.name}</th>
                     <td>{data.description}</td>
-                    <td><a class="underline" href={data.url} target="_blank">{data.url}</a></td>
-                    <td><a class="underline"  href={data.verification_url} target="_blank">{data.verification_url}</a></td>
+                    <td><a className="underline" href={data.url} target="_blank">{data.url}</a></td>
+                    <td><a className="underline"  href={data.verification_url} target="_blank">{data.verification_url}</a></td>
                     <td>{data.expired_at}</td>
                 </tr>
             )
@@ -133,8 +133,8 @@ export default function Home() {
                 <tr className="text-center">
                     <th>{data.name}</th>
                     <td>{data.description}</td>
-                    <td><a class="underline" href={data.url} target="_blank">{data.url}</a></td>
-                    <td><a class="underline" href={data.verification_url} target="_blank">{data.verification_url}</a></td>
+                    <td><a className="underline" href={data.url} target="_blank">{data.url}</a></td>
+                    <td><a className="underline" href={data.verification_url} target="_blank">{data.verification_url}</a></td>
                     <td>{data.expired_at}</td>
                 </tr>
             )
@@ -171,13 +171,13 @@ export default function Home() {
 
         
         <div className=" p-4 w-[60%] m-auto flex flex-col shadow-2xl opacity-80 mb-10 justify-center ">
-            { (account) && (
+            { (account  && account.address) && (
                 <div className="overflow-x-auto mt-2">
                 <center>
                     <h3><b>Events Owner:</b> 
                         <a href={"https://explorer.aptoslabs.com/account/" + account.address + "?network=" + NETWORK} target="_blank" rel="noreferrer">
                             <p className="underline">
-                                {account.address}
+                                {account.address.toString()}
                             </p>
                         </a>
                     </h3>

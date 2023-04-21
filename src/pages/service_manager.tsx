@@ -106,17 +106,17 @@ export default function Home() {
   //         <td>{services[i].description}</td>
   //         <td>
   //           <a href={services[i].url} target="_blank" rel="noreferrer">
-  //             <p class="underline">{services[i].url} </p>
+  //             <p className="underline">{services[i].url} </p>
   //           </a>
   //         </td>
   //         <td>
   //           <a href={services[i].verification_url} target="_blank" rel="noreferrer">
-  //             <p class="underline">{services[i].verification_url} </p>
+  //             <p className="underline">{services[i].verification_url} </p>
   //           </a>
   //         </td>
   //         <td>{services[i].expired_at}</td>
   //         <td>
-  //           <button class="btn btn-blue">LOAD</button>
+  //           <button className="btn btn-blue">LOAD</button>
   //         </td>
   //         {/* TODO: a btn to load data to the params in below input table */}
   //       </tr>
@@ -259,7 +259,7 @@ export default function Home() {
                   </td>
                   <td>{service.expired_at}</td>
                   <td>
-                    <button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" onClick={() => load_service(service)}>LOAD</button>
+                    <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" onClick={() => load_service(service)}>LOAD</button>
                   </td>
                 </tr>
               );
@@ -277,7 +277,7 @@ export default function Home() {
     <div>
       <p>
         <b>Module Path: </b>
-        <a target="_blank" href={MODULE_URL} class="underline">
+        <a target="_blank" href={MODULE_URL} className="underline">
           {DAPP_ADDRESS}::service_aggregator
         </a>
       </p>
