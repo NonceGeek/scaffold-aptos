@@ -289,110 +289,114 @@ export default function Home() {
           <br></br>
         </>
       )}
-      {hasAddrAggregator &&
-        <button
-          onClick={get_services}
-          className={
-            "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
-          }>
-           Refresh the Services Info
-        </button>
-      }
-
       {hasAddrAggregator && (
-        <div className="overflow-x-auto mt-2">
-          {services.length > 0 && (
-            <>
-              <h3 className="text-center font-bold">Services</h3>
-              <div>{render_services_table()}</div>
-            </>
-          )}
-        </div>
-      )}
-      <br></br>
-
-      <input
-        placeholder="service Name"
-        className="mt-8 p-4 input input-bordered input-primary w-1/4"
-        onChange={(e) => updateFormInput({ ...formInput, name: e.target.value })}
-        value={formInput.name}
-      />
-      <br></br>
-      <input
-        placeholder="service Description"
-        className="mt-8 p-4 input input-bordered input-primary w-1/4"
-        onChange={(e) => updateFormInput({ ...formInput, description: e.target.value })}
-        value={formInput.description}
-      />
-      <br></br>
-      <br></br>
-      <br></br>
-      <div className="inline-flex relative mr-3 formkit-field">
-        <p>https://github.com/</p>
-        <input
-          placeholder="github account"
-          className="p-4 input input-bordered input-primary ml-2"
-          onChange={(e) => updateFormInput({ ...formInput, github_acct: e.target.value })}
-          value={formInput.github_acct}
-        />
-      </div>
-      <br></br>
-      <br></br>
-      <div className="inline-flex relative mr-3 formkit-field">
-        <a href="https://docs.movedid.build/guides-for-the-scenarios-of-move-did/bind-github-and-movedid/" target="_blank">
-          <p className="underline">💡 How can I create a gist to verify my github acct?</p>
-        </a>
-      </div>
-      <br></br>
-      <div className="inline-flex relative mr-3 formkit-field">
-        <a href="https://gist.github.com" target="_blank">
-          <button className={'btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg'}>
-            Create a gist!
+        <>
+          <button
+            onClick={get_services}
+            className={
+              "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+            }>
+            Refresh the Services Info
           </button>
-        </a>
-      </div>
-      <br></br>
-      <br></br>
-      <div className="inline-flex relative mr-3 formkit-field w-1/4">
-        <p>https://gist.github.com/{formInput.github_acct}/</p>
-      <input
-        placeholder="gist Verification URL"
-        className="p-4 input input-bordered input-primary w-full ml-2"
-        onChange={(e) => updateFormInput({ ...formInput, gist_id: e.target.value })}
-        value={formInput.gist_id}
-      />
-      </div>
-      <br></br>
-      <br></br>
-      <div className="inline-flex relative mr-3 formkit-field">
-        <p>0 means never expire: </p>
-      <input
-        placeholder="expired at"
-        className="p-4 input input-bordered input-primary ml-2"
-        onChange={(e) => updateFormInput({ ...formInput, expired_at: parseInt(e.target.value) })}
+          <div className="overflow-x-auto mt-2">
+            {services.length > 0 && (
+              <>
+                <h3 className="text-center font-bold">Services</h3>
+                <div>{render_services_table()}</div>
+              </>
+            )}
+          <br></br>
+          </div>
 
-        value={formInput.expired_at}
-      />
-      </div>
-      <br></br>
-      <button onClick={add_service} className={'btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg'}>
-        Add Service
-      </button>
-      <br></br>
-      <button onClick={update_service} className={'btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg'}>
-        Update Service
-      </button>
-      <br></br>
-      <input
-        placeholder="service Name"
-        className="mt-8 p-4 input input-bordered input-primary w-1/4"
-        onChange={(e) => updateFormInput({ ...formInput, name: e.target.value })}
-        value={formInput.name}
-      />
-      <br></br>
-      <button onClick={delete_service} className={'btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg'}>
-        Delete Service
-      </button>
+
+
+        <input
+          placeholder="service Name"
+          className="mt-8 p-4 input input-bordered input-primary w-1/4"
+          onChange={(e) => updateFormInput({ ...formInput, name: e.target.value })}
+          value={formInput.name}
+        />
+        <br></br>
+        <input
+          placeholder="service Description"
+          className="mt-8 p-4 input input-bordered input-primary w-1/4"
+          onChange={(e) => updateFormInput({ ...formInput, description: e.target.value })}
+          value={formInput.description}
+        />
+        <br></br>
+        <br></br>
+        <br></br>
+
+        <div className="inline-flex relative mr-3 formkit-field">
+          <p>https://github.com/</p>
+          <input
+            placeholder="github account"
+            className="p-4 input input-bordered input-primary ml-2"
+            onChange={(e) => updateFormInput({ ...formInput, github_acct: e.target.value })}
+            value={formInput.github_acct}
+          />
+        </div>
+        <br></br>
+        <br></br>
+        <div className="inline-flex relative mr-3 formkit-field">
+          <a href="https://docs.movedid.build/guides-for-the-scenarios-of-move-did/bind-github-and-movedid/" target="_blank">
+            <p className="underline">💡 How can I create a gist to verify my github acct?</p>
+          </a>
+        </div>
+        <br></br>
+
+        <div className="inline-flex relative mr-3 formkit-field">
+          <a href="https://gist.github.com" target="_blank">
+            <button className={'btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg'}>
+              Create a gist!
+            </button>
+          </a>
+        </div>
+        <br></br>
+        <br></br>
+        <div className="inline-flex relative mr-3 formkit-field w-1/4">
+          <p>https://gist.github.com/{formInput.github_acct}/</p>
+        <input
+          placeholder="gist Verification URL"
+          className="p-4 input input-bordered input-primary w-full ml-2"
+          onChange={(e) => updateFormInput({ ...formInput, gist_id: e.target.value })}
+          value={formInput.gist_id}
+        />
+        </div>
+        <br></br>
+        <br></br>
+        <div className="inline-flex relative mr-3 formkit-field">
+          <p>0 means never expire: </p>
+        <input
+          placeholder="expired at"
+          className="p-4 input input-bordered input-primary ml-2"
+          onChange={(e) => updateFormInput({ ...formInput, expired_at: parseInt(e.target.value) })}
+          placeholder="0"
+          value={formInput.expired_at}
+        />
+        </div>
+
+        <br></br>
+        <button onClick={add_service} className={'btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg'}>
+          Add Service
+        </button>
+        <br></br>
+        <button onClick={update_service} className={'btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg'}>
+          Update Service
+        </button>
+        <br></br>
+        <input
+          placeholder="service Name"
+          className="mt-8 p-4 input input-bordered input-primary w-1/4"
+          onChange={(e) => updateFormInput({ ...formInput, name: e.target.value })}
+          value={formInput.name}
+        />
+        <br></br>
+        <button onClick={delete_service} className={'btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg'}>
+          Delete Service
+        </button>
+        </>
+      )}
       </center>
     </div>
   );

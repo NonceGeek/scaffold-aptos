@@ -317,17 +317,16 @@ export default function Home() {
           <br></br>
         </>
       )}
-      {hasAddrAggregator &&
-        <button
-          onClick={get_services}
-          className={
-            "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
-          }>
-           Refresh the Services Info
-        </button>
-      }
-
       {hasAddrAggregator && (
+        <>
+          <button
+            onClick={get_services}
+            className={
+              "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+            }>
+            Refresh the Services Info
+          </button>
+
         <div className="overflow-x-auto mt-2">
           {services.length > 0 && (
             <>
@@ -336,7 +335,6 @@ export default function Home() {
             </>
           )}
         </div>
-      )}
       <br></br>
       <input
         placeholder="service Name"
@@ -391,6 +389,8 @@ export default function Home() {
       <button onClick={delete_service} className={'btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg'}>
         Delete Service
       </button>
+      </>
+      )}
     </div>
   );
 }
