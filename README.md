@@ -6,7 +6,7 @@ This project is referenced from:
 
 > https://github.com/Amovane/aptos-NFT-marketplace
 
-## start running
+## Start Guide
 
 1. `git clone https://github.com/NonceGeek/scaffold-aptos.git`
 2. `d scaffold-move/scaffold-aptos`
