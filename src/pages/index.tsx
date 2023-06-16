@@ -368,7 +368,6 @@ export default function Home() {
         <div className="inline-flex relative mr-3 formkit-field">
           <p>0 means never expire: </p>
         <input
-          placeholder="expired at"
           className="p-4 input input-bordered input-primary ml-2"
           onChange={(e) => updateFormInput({ ...formInput, expired_at: parseInt(e.target.value) })}
           placeholder="0"
