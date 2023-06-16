@@ -14,6 +14,7 @@ export function NavBar() {
         </a>
         <ul className="menu menu-horizontal p-0 ml-5">
           <NavItem href="/" title="GithubBinder" />
+          <NavItem href="/github_repo_binder" title="GithubRepoBinder" />
           <NavItem href="/service_manager" title="ServiceManager" />
           <NavItem href="/service_events" title="ServiceEvents" />
           {/* <NavItem href="/addr" title="AddrManager" />
