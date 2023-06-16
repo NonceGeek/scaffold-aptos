@@ -1,20 +1,20 @@
-# aptos 前端开发脚手架
+# Aptos dApp Scaffold
 
-一个 基于 next.js Tailwind 的 move 应用脚手架。
+A aptos application scaffold based on next.js Tailwind.
 
-本项目参考自：
+This project is referenced from:
 
 > https://github.com/Amovane/aptos-NFT-marketplace
 
-## 启动运行
+## start running
 
-1. git clone <https://github.com/NonceGeek/scaffold-aptos.git>
-2. cd scaffold-move/scaffold-aptos
-3. yarn # 安装必须的前端包，注意自己本地的网络环境
-4. 环境配置，部分全局变量在 .env.local 中,该变量会默认 注入到 yarn 启动的进程当中。初学者注意，aptos官网提供的testnet faucet 的 url 不能直接使用。
-4. yarn dev
-5. yarn build #编译完成的 next.js 应用
+1. `git clone https://github.com/NonceGeek/scaffold-aptos.git`
+2. `d scaffold-move/scaffold-aptos`
+3.`yarn # Install the necessary front-end packages, pay attention to your local network environment`
+4. Environment configuration, some global variables are in .env.local, which will be injected into the process started by yarn by default. Attention beginners, the testnet faucet url provided by aptos official website cannot be used directly.
+4. `yarn dev`
+5.`yarn build #compiled next.js application`
 
-本项目合约基于 MoveDID 。 项目地址 <https://github.com/NonceGeek/MoveDID>。
+This project contract is based on MoveDID. Project address <https://github.com/NonceGeek/MoveDID>.
 
-本项目由 [NonceGeek DAO](https://noncegeek.com/#/) 维护。
+This project is maintained by [NonceGeek DAO](https://noncegeek.com/#/).
