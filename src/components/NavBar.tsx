@@ -17,6 +17,7 @@ export function NavBar() {
           <NavItem href="/github_repo_binder" title="GithubRepoBinder" />
           <NavItem href="/service_manager" title="ServiceManager" />
           <NavItem href="/service_events" title="ServiceEvents" />
+          <NavItem href="/lightweight_dao_manager" title="LightweightDAOManager" />
           {/* <NavItem href="/addr" title="AddrManager" />
           <NavItem href="/addr_events" title="AddrEvents" />
           <NavItem href="/create_did_events" title="CreateDIDEvents" /> */}
