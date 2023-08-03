@@ -35,6 +35,8 @@ export default function Home() {
   // const [resource, setResource] = React.useState<MoveResource>();
   // const [resource_v2, setResourceV2] = React.useState<any>();
   const [addrInfo, setAddrInfo] = React.useState<Array<any>>([]);
+  const [typeInfo, setTypeInfo] = React.useState<any>(0);
+  const [descriptionInfo, setDescriptionInfo] = React.useState<any>("");
   const [hasAddrAggregator, setHasAddrAggregator] = React.useState<boolean>(false);
   const [addAddrInput, setAddAddrInput] = useState<{
     did_type: number;
@@ -168,6 +170,8 @@ export default function Home() {
         // console.log(addr_aggregator);
         if(addr_aggregator) {
           const addresses: Array<string> = addr_aggregator.data.addrs;
+          const type = addr_aggregator.data.type;
+          const description = addr_aggregator.data.description;
           const addr_infos_map_handle: string = addr_aggregator.data.addr_infos_map.handle;
           // console.log(addresses);
           // console.log(addr_infos_map_handle);
@@ -182,6 +186,8 @@ export default function Home() {
           }
           console.log(out);
           setAddrInfo(out);
+          setTypeInfo(type);
+          setDescriptionInfo(description);
         }
       } catch(err) {
         console.log(err);
@@ -354,6 +360,7 @@ export default function Home() {
             Init Your DID
           </button> &nbsp; &nbsp; &nbsp; &nbsp; 💡 INIT Your DID on Aptos before the other Operations!
           <br></br>
+          <center>
           <button
             onClick={get_addr_info}
             className={
@@ -361,12 +368,14 @@ export default function Home() {
             }>
             Refresh DID Resources
           </button>
+          </center>
 
           <br></br>
         </>
       )}
 
       {hasAddrAggregator &&
+        <center>
         <button
           onClick={get_addr_info}
           className={
@@ -374,11 +383,25 @@ export default function Home() {
           }>
           Refresh DID Resources
         </button>
+        <br></br>
+        </center>
+
       }
       {/* Need the description here. */}
       {(hasAddrAggregator && addrInfo) && (
         <div className="overflow-x-auto mt-2">
-          <h3 className="text-center font-bold">DID Resources</h3>
+            <hr></hr>
+            <br></br>
+            {/* todo: make it diff of h1 - h5 */}
+            <h2 className="text-center font-bold">DID Basic Information</h2>
+            <center>
+                <p><b>DID Type: </b> {typeInfo === "0" ? "Human" : "DAO"}</p>
+                <p><b>DID Description: </b> {descriptionInfo}</p>
+            </center>
+            <br></br>
+            <hr></hr>
+            <br></br>
+          <h2 className="text-center font-bold">Addr Aggreagator</h2>
           <table className="table table-compact w-full my-2">
             <thead>
               <tr className="text-center">
