@@ -393,7 +393,7 @@ export default function Home() {
             <hr></hr>
             <br></br>
             {/* todo: make it diff of h1 - h5 */}
-            <h2 className="text-center font-bold">DID Basic Information</h2>
+            <h2 className="text-center font-bold text-2xl">DID Basic Information</h2>
             <center>
                 <p><b>DID Type: </b> {typeInfo === "0" ? "Human" : "DAO"}</p>
                 <p><b>DID Description: </b> {descriptionInfo}</p>
