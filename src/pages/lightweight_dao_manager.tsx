@@ -2,7 +2,7 @@ import {
   DAPP_ADDRESS,
   APTOS_FAUCET_URL,
   APTOS_NODE_URL,
-  MODULE_URL
+  MODULE_URL,
 } from "../config/constants";
 import { useWallet } from "@manahippo/aptos-wallet-adapter";
 import { MoveResource } from "@martiandao/aptos-web3-bip44.js/dist/generated";
@@ -18,8 +18,8 @@ import { CodeBlock } from "../components/CodeBlock";
 
 import newAxios from "../utils/axios_utils";
 
-import React, { KeyboardEventHandler } from 'react';
-import CreatableSelect from 'react-select/creatable';
+import React, { KeyboardEventHandler } from "react";
+import CreatableSelect from "react-select/creatable";
 
 import VerifyEthAddrBtn from "../components/VerifyEthAddrBtn";
 import VerifyAptosAddrBtn from "../components/VerifyAptAddrBtn";
@@ -37,7 +37,8 @@ export default function Home() {
   const [addrInfo, setAddrInfo] = React.useState<Array<any>>([]);
   const [typeInfo, setTypeInfo] = React.useState<any>(0);
   const [descriptionInfo, setDescriptionInfo] = React.useState<any>("");
-  const [hasAddrAggregator, setHasAddrAggregator] = React.useState<boolean>(false);
+  const [hasAddrAggregator, setHasAddrAggregator] =
+    React.useState<boolean>(false);
   const [addAddrInput, setAddAddrInput] = useState<{
     did_type: number;
     description: string;
@@ -82,20 +83,23 @@ export default function Home() {
     label,
     value: label,
   });
-  const [inputValue, setInputValue] = React.useState('');
+  const [inputValue, setInputValue] = React.useState("");
   const [chainsValue, setChainsValue] = React.useState<readonly Option[]>([]);
-  
-  const [inputValue2, setInputValue2] = React.useState('');
+
+  const [inputValue2, setInputValue2] = React.useState("");
   const [chainsValue2, setChainsValue2] = React.useState<readonly Option[]>([]);
 
   const handleKeyDown: KeyboardEventHandler = (event) => {
     if (!inputValue) return;
     switch (event.key) {
-      case 'Enter':
-      case 'Tab':
+      case "Enter":
+      case "Tab":
         setChainsValue((prev) => [...prev, createOption(inputValue)]);
-        setAddAddrInput({ ...addAddrInput, chains: [...addAddrInput.chains, inputValue] })
-        setInputValue('');
+        setAddAddrInput({
+          ...addAddrInput,
+          chains: [...addAddrInput.chains, inputValue],
+        });
+        setInputValue("");
         event.preventDefault();
     }
   };
@@ -103,42 +107,45 @@ export default function Home() {
   const handleKeyDown2: KeyboardEventHandler = (event) => {
     if (!inputValue2) return;
     switch (event.key) {
-      case 'Enter':
-      case 'Tab':
+      case "Enter":
+      case "Tab":
         setChainsValue2((prev) => [...prev, createOption(inputValue2)]);
-        setUpdateAddrInput({ ...updateAddrInput, chains: [...updateAddrInput.chains, inputValue2] })
-        setInputValue2('');
+        setUpdateAddrInput({
+          ...updateAddrInput,
+          chains: [...updateAddrInput.chains, inputValue2],
+        });
+        setInputValue2("");
         event.preventDefault();
     }
   };
 
   async function init_did() {
-    await signAndSubmitTransaction(
-      do_init_did(),
-      { gas_unit_price: 100 }
-    );
+    await signAndSubmitTransaction(do_init_did(), { gas_unit_price: 100 });
     check_addr_aggregator();
   }
 
   async function add_addr() {
-    const test = await signAndSubmitTransaction(
-      do_add_addr(),
-      { gas_unit_price: 100 }
-    );
+    const test = await signAndSubmitTransaction(do_add_addr(), {
+      gas_unit_price: 100,
+    });
     console.log(test);
     get_addr_info(); // refresh after address added
   }
 
   async function update_addr() {
-    const addrIndex = addrInfo.map((item) => {return item.addr}).indexOf(updateAddrInput.addr);
-    if(addrIndex !== -1) { // if address to be updated is one of the existing addresses, see if it's verified
+    const addrIndex = addrInfo
+      .map((item) => {
+        return item.addr;
+      })
+      .indexOf(updateAddrInput.addr);
+    if (addrIndex !== -1) {
+      // if address to be updated is one of the existing addresses, see if it's verified
       const verified = addrInfo[addrIndex].signature !== "0x";
-      if(verified) {
+      if (verified) {
         console.log("will update verified address");
-        const txn = await signAndSubmitTransaction(
-          do_update_addr_verified(),
-          { gas_unit_price: 100 }
-        );
+        const txn = await signAndSubmitTransaction(do_update_addr_verified(), {
+          gas_unit_price: 100,
+        });
         console.log(txn);
       } else {
         console.log("will update non verified address");
@@ -150,38 +157,45 @@ export default function Home() {
       }
       get_addr_info(); // refresh addr info after update
     } else {
-      alert("Address not found!")
+      alert("Address not found!");
     }
   }
 
   async function delete_addr(address: string) {
-    const txn = await signAndSubmitTransaction(
-      do_delete_addr(address),
-      { gas_unit_price: 100 }
-    );
+    const txn = await signAndSubmitTransaction(do_delete_addr(address), {
+      gas_unit_price: 100,
+    });
     console.log(txn);
     get_addr_info(); // refresh addr info after update
   }
 
   async function get_addr_info() {
-    if(account && account.address) {
+    if (account && account.address) {
       try {
-        const addr_aggregator: any = await client.aptosClient.getAccountResource(account.address.toString(), DAPP_ADDRESS + "::addr_aggregator::AddrAggregator");
+        const addr_aggregator: any =
+          await client.aptosClient.getAccountResource(
+            account.address.toString(),
+            DAPP_ADDRESS + "::addr_aggregator::AddrAggregator"
+          );
         // console.log(addr_aggregator);
-        if(addr_aggregator) {
+        if (addr_aggregator) {
           const addresses: Array<string> = addr_aggregator.data.addrs;
           const type = addr_aggregator.data.type;
           const description = addr_aggregator.data.description;
-          const addr_infos_map_handle: string = addr_aggregator.data.addr_infos_map.handle;
+          const addr_infos_map_handle: string =
+            addr_aggregator.data.addr_infos_map.handle;
           // console.log(addresses);
           // console.log(addr_infos_map_handle);
           const out: Array<any> = [];
-          for(let i = 0; i < addresses.length; i++) {
-            const table_item = await client.aptosClient.getTableItem(addr_infos_map_handle, {
-              key_type: "0x1::string::String",
-              value_type: DAPP_ADDRESS + "::addr_info::AddrInfo",
-              key: addresses[i],
-            });
+          for (let i = 0; i < addresses.length; i++) {
+            const table_item = await client.aptosClient.getTableItem(
+              addr_infos_map_handle,
+              {
+                key_type: "0x1::string::String",
+                value_type: DAPP_ADDRESS + "::addr_info::AddrInfo",
+                key: addresses[i],
+              }
+            );
             out.push(table_item);
           }
           console.log(out);
@@ -189,29 +203,44 @@ export default function Home() {
           setTypeInfo(type);
           setDescriptionInfo(description);
         }
-      } catch(err) {
+      } catch (err) {
         console.log(err);
       }
     }
   }
 
-  useEffect(()=>{get_addr_info()}, [account]);
+  useEffect(() => {
+    get_addr_info();
+  }, [account]);
 
   function do_init_did() {
-    const { description, resource_path, addr_type, addr, pubkey, addr_description, chains } = addAddrInput;
+    const {
+      description,
+      resource_path,
+      addr_type,
+      addr,
+      pubkey,
+      addr_description,
+      chains,
+    } = addAddrInput;
     return {
       type: "entry_function_payload",
       function: DAPP_ADDRESS + "::init::init",
       type_arguments: [],
-      arguments: [
-        addr_type,
-        description
-      ],
+      arguments: [addr_type, description],
     };
   }
 
   function do_add_addr() {
-    const { description, resource_path, addr_type, addr, pubkey, addr_description, expire_second } = addAddrInput;
+    const {
+      description,
+      resource_path,
+      addr_type,
+      addr,
+      pubkey,
+      addr_description,
+      expire_second,
+    } = addAddrInput;
     return {
       type: "entry_function_payload",
       function: DAPP_ADDRESS + "::addr_aggregator::add_addr",
@@ -232,14 +261,11 @@ export default function Home() {
     const { addr, chains, addr_description } = updateAddrInput;
     return {
       type: "entry_function_payload",
-      function: DAPP_ADDRESS + "::addr_aggregator::update_addr_info_with_chains_and_description_and_expired_at",
+      function:
+        DAPP_ADDRESS +
+        "::addr_aggregator::update_addr_info_with_chains_and_description_and_expired_at",
       type_arguments: [],
-      arguments: [
-        addr,
-        chains,
-        addr_description,
-        0
-      ],
+      arguments: [addr, chains, addr_description, 0],
     };
   }
 
@@ -247,13 +273,11 @@ export default function Home() {
     const { addr, chains, addr_description } = updateAddrInput;
     return {
       type: "entry_function_payload",
-      function: DAPP_ADDRESS + "::addr_aggregator::update_addr_info_for_non_verification",
+      function:
+        DAPP_ADDRESS +
+        "::addr_aggregator::update_addr_info_for_non_verification",
       type_arguments: [],
-      arguments: [
-        addr,
-        chains,
-        addr_description,
-      ],
+      arguments: [addr, chains, addr_description],
     };
   }
 
@@ -263,9 +287,7 @@ export default function Home() {
       type: "entry_function_payload",
       function: DAPP_ADDRESS + "::addr_aggregator::delete_addr",
       type_arguments: [],
-      arguments: [
-        address,
-      ],
+      arguments: [address],
     };
   }
 
@@ -277,20 +299,45 @@ export default function Home() {
           <th>{addrInfo[i].addr.substring(0, 10) + "..."}</th>
           <td>{addrInfo[i].addr_type === "0" ? "ETH" : "APT"}</td>
           <td>{addrInfo[i].chains}</td>
-          <td>{addrInfo[i].description.length > 20 ? addrInfo[i].description.substring(0, 20) : addrInfo[i].description}</td>
+          <td>
+            {addrInfo[i].description.length > 20
+              ? addrInfo[i].description.substring(0, 20)
+              : addrInfo[i].description}
+          </td>
           <td>{new Date(addrInfo[i].created_at * 1000).toLocaleString()}</td>
-          <td>{addrInfo[i].expired_at === "0" ? "Never" :new Date(addrInfo[i].expired_at * 1000).toLocaleString()}</td>
-          <td>{addrInfo[i].updated_at === "0" ? "Never" : new Date(addrInfo[i].updated_at * 1000).toLocaleString()}</td>
+          <td>
+            {addrInfo[i].expired_at === "0"
+              ? "Never"
+              : new Date(addrInfo[i].expired_at * 1000).toLocaleString()}
+          </td>
+          <td>
+            {addrInfo[i].updated_at === "0"
+              ? "Never"
+              : new Date(addrInfo[i].updated_at * 1000).toLocaleString()}
+          </td>
           <td>{addrInfo[i].signature !== "0x" ? "Yes" : "No"}</td>
-          {addrInfo[i].addr_type === "0" ? 
-            <VerifyEthAddrBtn addrInfo={addrInfo} addrIndex={i} address={addrInfo[i].addr} verified={addrInfo[i].signature !== "0x"} get_addr_info={get_addr_info}/> : 
-            <VerifyAptosAddrBtn addrInfo={addrInfo} addrIndex={i} address={addrInfo[i].addr} verified={addrInfo[i].signature !== "0x"} get_addr_info={get_addr_info}/>
-          }
+          {addrInfo[i].addr_type === "0" ? (
+            <VerifyEthAddrBtn
+              addrInfo={addrInfo}
+              addrIndex={i}
+              address={addrInfo[i].addr}
+              verified={addrInfo[i].signature !== "0x"}
+              get_addr_info={get_addr_info}
+            />
+          ) : (
+            <VerifyAptosAddrBtn
+              addrInfo={addrInfo}
+              addrIndex={i}
+              address={addrInfo[i].addr}
+              verified={addrInfo[i].signature !== "0x"}
+              get_addr_info={get_addr_info}
+            />
+          )}
           <td>
             <button
-              onClick={()=>delete_addr(addrInfo[i].addr)}
+              onClick={() => delete_addr(addrInfo[i].addr)}
               className={
-                'btn btn-primary font-bold text-white  w-[50px] rounded-[50%] shadow-lg flex justify-center items-center text-[30px]'
+                "btn btn-primary font-bold text-white  w-[50px] rounded-[50%] shadow-lg flex justify-center items-center text-[30px]"
               }
             >
               -
@@ -303,34 +350,41 @@ export default function Home() {
   };
 
   async function check_addr_aggregator() {
-    if(account && account.address) {
+    if (account && account.address) {
       try {
-        const addr_aggregator: any = await client.aptosClient.getAccountResource(account.address.toString(), DAPP_ADDRESS + "::addr_aggregator::AddrAggregator");
+        const addr_aggregator: any =
+          await client.aptosClient.getAccountResource(
+            account.address.toString(),
+            DAPP_ADDRESS + "::addr_aggregator::AddrAggregator"
+          );
         console.log("addr_aggregator: " + addr_aggregator.data);
         setHasAddrAggregator(true);
-      } catch(err: any) {
+      } catch (err: any) {
         console.log("check_addr_aggregator: " + err);
-        setHasAddrAggregator(false);     
+        setHasAddrAggregator(false);
       }
     }
   }
 
-  useEffect(() => {check_addr_aggregator()}, [account])
-  useEffect(() => {console.log("has_addr: " + hasAddrAggregator)}, [hasAddrAggregator])
+  useEffect(() => {
+    check_addr_aggregator();
+  }, [account]);
+  useEffect(() => {
+    console.log("has_addr: " + hasAddrAggregator);
+  }, [hasAddrAggregator]);
 
   // useEffect(() => {console.log("has account:" + account)}, [account])
 
-
   return (
     <div>
-        <center>
-            <p>
-                <b>Module Path:</b>
-                <a target="_blank" href={MODULE_URL} className="underline"> 
-                    {DAPP_ADDRESS}::addr_aggregator
-                </a>
-            </p>
-        </center>
+      <center>
+        <p>
+          <b>Module Path:</b>
+          <a target="_blank" href={MODULE_URL} className="underline">
+            {DAPP_ADDRESS}::addr_aggregator
+          </a>
+        </p>
+      </center>
       {!hasAddrAggregator && (
         <>
           <input
@@ -346,7 +400,10 @@ export default function Home() {
           <select
             value={addAddrInput.did_type}
             onChange={(e) => {
-              setAddAddrInput({ ...addAddrInput, did_type: parseInt(e.target.value) })
+              setAddAddrInput({
+                ...addAddrInput,
+                did_type: parseInt(e.target.value),
+              });
             }}
           >
             <option value="1">DAO</option>
@@ -356,52 +413,68 @@ export default function Home() {
             onClick={init_did}
             className={
               "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
-            }>
+            }
+          >
             Init Your DID
-          </button> &nbsp; &nbsp; &nbsp; &nbsp; 💡 INIT Your DID on Aptos before the other Operations!
+          </button>{" "}
+          &nbsp; &nbsp; &nbsp; &nbsp; 💡 INIT Your DID on Aptos before the other
+          Operations!
           <br></br>
           <center>
-          <button
-            onClick={get_addr_info}
-            className={
-              "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
-            }>
-            Refresh DID Resources
-          </button>
+            <button
+              onClick={get_addr_info}
+              className={
+                "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+              }
+            >
+              Refresh DID Resources
+            </button>
           </center>
-
           <br></br>
         </>
       )}
 
-      {hasAddrAggregator &&
+      {hasAddrAggregator && (
         <center>
-        <button
-          onClick={get_addr_info}
-          className={
-            "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
-          }>
-          Refresh DID Resources
-        </button>
-        <br></br>
+          <button
+            onClick={get_addr_info}
+            className={
+              "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+            }
+          >
+            Refresh DID Resources
+          </button>
+          <br></br>
         </center>
-
-      }
+      )}
       {/* Need the description here. */}
-      {(hasAddrAggregator && addrInfo) && (
+      {hasAddrAggregator && addrInfo && (
         <div className="overflow-x-auto mt-2">
-            <hr></hr>
-            <br></br>
-            {/* todo: make it diff of h1 - h5 */}
-            <h2 className="text-center font-bold text-2xl">DID Basic Information</h2>
-            <center>
-                <p><b>DID Type: </b> {typeInfo === "0" ? "Human" : "DAO"}</p>
-                <p><b>DID Description: </b> {descriptionInfo}</p>
-            </center>
-            <br></br>
-            <hr></hr>
-            <br></br>
-          <h2 className="text-center font-bold">Addr Aggreagator</h2>
+          <hr></hr>
+          <br></br>
+          {/* todo: make it diff of h1 - h5 */}
+          <center>
+            <article className="prose lg:prose-xl">
+              <h2 className="text-center">DID Basic Information</h2>
+            </article>
+          </center>
+          <center>
+            <p>
+              <b>DID Type: </b> {typeInfo === "0" ? "Human" : "DAO"}
+            </p>
+            <p>
+              <b>DID Description: </b> {descriptionInfo}
+            </p>
+          </center>
+          <br></br>
+          <hr></hr>
+          <br></br>
+          <center>
+            <article className="prose lg:prose-xl">
+              <h2 className="prose text-center">Addr Aggreagator</h2>
+            </article>
+          </center>
+
           <table className="table table-compact w-full my-2">
             <thead>
               <tr className="text-center">
@@ -423,25 +496,28 @@ export default function Home() {
           </table>
 
           <br></br>
-            <select
-                value={addAddrInput.addr_type}
-                onChange={(e) => {
-                setAddAddrInput({ ...addAddrInput, addr_type: parseInt(e.target.value) })
-                }}
-            >
-                <option value="1">Aptos Type Addr</option>
-                {/* <option value="0">Ethereum Type Addr</option> */}
-            </select>
-            <br></br>
-            
-            <input
-                placeholder="Addr"
-                className="mt-8 p-4 input input-bordered input-primary w-full"
-                onChange={(e) =>
-                setAddAddrInput({ ...addAddrInput, addr: e.target.value })
-                }
-            />
-            {/* <br></br>
+          <select
+            value={addAddrInput.addr_type}
+            onChange={(e) => {
+              setAddAddrInput({
+                ...addAddrInput,
+                addr_type: parseInt(e.target.value),
+              });
+            }}
+          >
+            <option value="1">Aptos Type Addr</option>
+            {/* <option value="0">Ethereum Type Addr</option> */}
+          </select>
+          <br></br>
+
+          <input
+            placeholder="Addr"
+            className="mt-8 p-4 input input-bordered input-primary w-full"
+            onChange={(e) =>
+              setAddAddrInput({ ...addAddrInput, addr: e.target.value })
+            }
+          />
+          {/* <br></br>
             <input
                 placeholder="Pubkey (Required for APT if need to verify acct; Optional for ETH)"
                 className="mt-8 p-4 input input-bordered input-primary w-full"
@@ -449,16 +525,19 @@ export default function Home() {
                 setAddAddrInput({ ...addAddrInput, pubkey: e.target.value })
                 }
             /> */}
-            <br></br>
-            <input
-                placeholder="Addr Description"
-                className="mt-8 p-4 input input-bordered input-primary w-full"
-                onChange={(e) =>
-                setAddAddrInput({ ...addAddrInput, addr_description: e.target.value })
-                }
-            />
-            <br></br>
-            {/* <CreatableSelect
+          <br></br>
+          <input
+            placeholder="Addr Description"
+            className="mt-8 p-4 input input-bordered input-primary w-full"
+            onChange={(e) =>
+              setAddAddrInput({
+                ...addAddrInput,
+                addr_description: e.target.value,
+              })
+            }
+          />
+          <br></br>
+          {/* <CreatableSelect
                 components={components}
                 inputValue={inputValue}
                 isClearable
@@ -494,41 +573,47 @@ export default function Home() {
                 },
                 }}
             /> */}
-            <input
-                placeholder="Expire Second"
-                className="mt-8 p-4 input input-bordered input-primary w-full"
-                value={addAddrInput.expire_second}
-                onChange={(e) =>
-                setAddAddrInput({ ...addAddrInput, expire_second: parseInt(e.target.value) })
-                }
-            />
-            <br></br>
-            <button
-                onClick={add_addr}
-                className={
-                "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
-                }>
-                Add Addr
-            </button>
-            <br></br>
-            
+          <input
+            placeholder="Expire Second"
+            className="mt-8 p-4 input input-bordered input-primary w-full"
+            value={addAddrInput.expire_second}
+            onChange={(e) =>
+              setAddAddrInput({
+                ...addAddrInput,
+                expire_second: parseInt(e.target.value),
+              })
+            }
+          />
+          <br></br>
+          <button
+            onClick={add_addr}
+            className={
+              "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+            }
+          >
+            Add Addr
+          </button>
+          <br></br>
 
-            <input
-                placeholder="Addr"
-                className="mt-8 p-4 input input-bordered input-primary w-full"
-                onChange={(e) =>
-                setUpdateAddrInput({ ...updateAddrInput, addr: e.target.value })
-                }
-            />
-            <br></br>
-            <input
-                placeholder="Addr Description"
-                className="mt-8 p-4 input input-bordered input-primary w-full"
-                onChange={(e) =>
-                setUpdateAddrInput({ ...updateAddrInput, addr_description: e.target.value })
-                }
-            />
-            {/* <CreatableSelect
+          <input
+            placeholder="Addr"
+            className="mt-8 p-4 input input-bordered input-primary w-full"
+            onChange={(e) =>
+              setUpdateAddrInput({ ...updateAddrInput, addr: e.target.value })
+            }
+          />
+          <br></br>
+          <input
+            placeholder="Addr Description"
+            className="mt-8 p-4 input input-bordered input-primary w-full"
+            onChange={(e) =>
+              setUpdateAddrInput({
+                ...updateAddrInput,
+                addr_description: e.target.value,
+              })
+            }
+          />
+          {/* <CreatableSelect
                 components={components}
                 inputValue={inputValue2}
                 isClearable
@@ -564,17 +649,16 @@ export default function Home() {
                 },
                 }}
             /> */}
-            <button
-                onClick={update_addr}
-                className={
-                "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
-                }>
-                Update Addr
-            </button>
+          <button
+            onClick={update_addr}
+            className={
+              "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+            }
+          >
+            Update Addr
+          </button>
         </div>
       )}
-      
-      
 
       {/* <button
         onClick={delete_addr}
@@ -583,6 +667,6 @@ export default function Home() {
         }>
         Delete Addr
       </button> */}
-    </div >
+    </div>
   );
 }
