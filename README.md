@@ -2,6 +2,10 @@
 
 A aptos application scaffold based on next.js Tailwind.
 
+See example that buidl based on Scaffold-Aptos(check the branches):
+
+> https://github.com/NonceGeek/scaffold-aptos-examples
+
 This project is referenced from:
 
 > https://github.com/Amovane/aptos-NFT-marketplace
