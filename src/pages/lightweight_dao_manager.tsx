@@ -47,6 +47,7 @@ export default function Home() {
     addr: string;
     pubkey: string;
     addr_description: string;
+    spec_fields: string;
     chains: Array<string>;
     expire_second: number;
   }>({
@@ -57,6 +58,7 @@ export default function Home() {
     addr: "",
     pubkey: "",
     addr_description: "",
+    spec_fields: "",
     chains: [],
     expire_second: 0,
   });
@@ -238,6 +240,7 @@ export default function Home() {
       addr_type,
       addr,
       pubkey,
+      spec_fields,
       addr_description,
       expire_second,
     } = addAddrInput;
@@ -480,6 +483,7 @@ export default function Home() {
               <tr className="text-center">
                 <th>Address</th>
                 {/* TODO: Need to Copiable */}
+                {/* TODO: Need to judge if asset */}
                 <th>Address Type</th>
                 <th>Chain(s)</th>
                 <th>Description</th>
@@ -533,6 +537,30 @@ export default function Home() {
               setAddAddrInput({
                 ...addAddrInput,
                 addr_description: e.target.value,
+              })
+            }
+          />
+          <br></br>
+          <input
+            placeholder="Public Key(Only should add for APT addr that needed to verify)"
+            className="mt-8 p-4 input input-bordered input-primary w-full"
+            value={addAddrInput.pubkey}
+            onChange={(e) =>
+              setAddAddrInput({
+                ...addAddrInput,
+                pubkey: e.target.value,
+              })
+            }
+          />
+          <br></br>
+          <input
+            placeholder="Spec Fields"
+            className="mt-8 p-4 input input-bordered input-primary w-full"
+            value={addAddrInput.spec_fields}
+            onChange={(e) =>
+              setAddAddrInput({
+                ...addAddrInput,
+                spec_fields: e.target.value,
               })
             }
           />
