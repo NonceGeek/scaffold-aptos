@@ -506,7 +506,7 @@ export default function Home() {
             }}
           >
             <option value="1">Aptos Type Addr</option>
-            {/* <option value="0">Ethereum Type Addr</option> */}
+            <option value="0">Ethereum Type Addr</option>
           </select>
           <br></br>
 
