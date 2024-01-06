@@ -1,6 +1,6 @@
 # Aptos dApp Scaffold
 
- 🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Aptos blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+ 🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Aptos blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts. And...We are going to add AI Abilities for Aptos dApp Scaffold, to generate code automatically.
 
 See example that buidl based on Scaffold-Aptos(check the branches):
 
