@@ -74,22 +74,7 @@ className="max-w-sm flex items-center justify-center h-10 my-5 bg-gray-100 dark:
 <button className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
   Secondary
 </button>
-{/* Success Button */}
-<button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-  Success
-</button>
-{/* Danger Button */}
-<button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-  Danger
-</button>
-{/* Warning Button */}
-<button className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
-  Warning
-</button>
-{/* Info Button */}
-<button className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded">
-  Info
-</button>
+...
 {/* Light Button */}
 <button className="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded">
   Light
