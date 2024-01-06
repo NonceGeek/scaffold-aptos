@@ -1,6 +1,6 @@
 # Aptos dApp Scaffold
 
-A aptos application scaffold based on next.js Tailwind.
+ 🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Aptos blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
 
 See example that buidl based on Scaffold-Aptos(check the branches):
 
