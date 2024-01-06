@@ -1,0 +1,20 @@
+/* styles/global.css */
+.markdown h1 {
+  @apply text-2xl font-bold my-2;
+}
+
+.markdown h2 {
+    @apply text-2xl font-bold my-2;
+  }
+
+.markdown p {
+  @apply my-2;
+}
+
+.markdown ul {
+  @apply list-disc list-inside;
+}
+
+.markdown li {
+  @apply ml-4;
+}

@@ -13,15 +13,10 @@ export function NavBar() {
           <Image src="/logo.png" width={64} height={64} alt="logo" />
         </a>
         <ul className="menu menu-horizontal p-0 ml-5">
-          <NavItem href="/" title="GithubBinder" />
-          <NavItem href="/github_repo_binder" title="GithubRepoBinder" />
-          <NavItem href="/service_manager" title="ServiceManager" />
-          <NavItem href="/service_events" title="ServiceEvents" />
-          <NavItem href="/lightweight_dao_manager" title="LightweightDAOManager" />
-          {/* <NavItem href="/addr" title="AddrManager" />
-          <NavItem href="/addr_events" title="AddrEvents" />
-          <NavItem href="/create_did_events" title="CreateDIDEvents" /> */}
-          {/* <NavItem href="/did_querier" title="DIDQuerier" /> */}
+          <NavItem href="/" title="Contract Interactor" />
+          <NavItem href="/example_ui" title="Example UI" />
+          <NavItem href="/snippets" title="Snippets" />
+          <NavItem href="/github_repo_binder" title="Generate Stuff by AI" />
           <li className="font-sans font-semibold text-lg">
             <a href="https://github.com/NonceGeek/MoveDID/tree/main/did-aptos" target="_blank">Source Code</a>
             <a href={MODULE_URL} target="_blank">Contract on Explorer</a>

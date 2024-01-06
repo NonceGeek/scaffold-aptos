@@ -1,6 +1,8 @@
 import "../styles/globals.css";
 import "../styles/loading.css";
 import "../styles/select-input.css";
+import '../styles/markdown.css';
+// Point: change this file if there is any need to adjust the markdown style.
 import { NavBar } from "../components/NavBar";
 import type { AppProps } from "next/app";
 import { useMemo, useState } from "react";
