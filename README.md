@@ -1,4 +1,4 @@
-# Aptos dApp Scaffold
+# Scaffold-Aptos
 
  🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Aptos blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts. And...We are going to add AI Abilities for Aptos dApp Scaffold, to generate code automatically.
 
@@ -10,7 +10,7 @@ This project is referenced from:
 
 > https://github.com/Amovane/aptos-NFT-marketplace
 
-## Start Guide
+## Start Guide(//TODO)
 
 1. `git clone https://github.com/NonceGeek/scaffold-aptos.git`
 2. `d scaffold-move/scaffold-aptos`
