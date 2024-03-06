@@ -11,10 +11,12 @@
   },
   "dependencies": {
     "@manahippo/aptos-wallet-adapter": "^1.0.10",
-    "@martiandao/aptos-web3-bip44.js": "^1.2.10",
+    "@martiandao/aptos-web3-bip44.js": "^2.0.2",
+    "@rainbow-me/rainbowkit": "^2.0.1",
     "@solana/web3.js": "^1.66.2",
     "@supabase/supabase-js": "^1.35.6",
     "@tailwindcss/typography": "^0.5.10",
+    "@tanstack/react-query": "^5.24.8",
     "@types/mime": "^3.0.1",
     "axios": "^0.27.2",
     "daisyui": "^2.24.0",
@@ -25,14 +27,18 @@
     "mongodb": "^4.9.0",
     "next": "^12.3.1-canary.0",
     "nft.storage": "^7.0.0",
+    "rainbowkit": "^0.0.1",
     "react": "18.1.0",
     "react-dom": "18.1.0",
+    "react-hot-toast": "^2.4.1",
+    "react-markdown": "^9.0.1",
     "react-select": "^5.7.0",
     "rehype-sanitize": "^6.0.0",
     "rehype-stringify": "^10.0.0",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
-    "remark-rehype": "^11.0.0"
+    "remark-rehype": "^11.0.0",
+    "viem": "2.x"
   },
   "devDependencies": {
     "@types/node": "17.0.35",

@@ -15,11 +15,12 @@ export function NavBar() {
         <ul className="menu menu-horizontal p-0 ml-5">
           <NavItem href="/" title="Contract Interactor" />
           <NavItem href="/example_ui" title="Example UI" />
+          <NavItem href="/scaffold_examples" title="Examples" />
           <NavItem href="/snippets" title="Snippets" />
-          <NavItem href="/github_repo_binder" title="Generate Stuff by AI" />
           <li className="font-sans font-semibold text-lg">
-            <a href="https://github.com/NonceGeek/MoveDID/tree/main/did-aptos" target="_blank">Source Code</a>
-            <a href={MODULE_URL} target="_blank">Contract on Explorer</a>
+            <a href="https://assistant.aptosfoundation.org/" target="_blank" rel="noreferrer">AI Assistant</a>
+            <a href="https://github.com/NonceGeek/scaffold-aptos" target="_blank" rel="noreferrer">Source Code</a>
+            <a href={MODULE_URL} target="_blank" rel="noreferrer">Contract on Explorer</a>
           </li>
         </ul>
       </div>

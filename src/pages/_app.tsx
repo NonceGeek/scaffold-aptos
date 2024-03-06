@@ -2,8 +2,10 @@ import "../styles/globals.css";
 import "../styles/loading.css";
 import "../styles/select-input.css";
 import '../styles/markdown.css';
+
 // Point: change this file if there is any need to adjust the markdown style.
 import { NavBar } from "../components/NavBar";
+import { Footer } from "../components/Footer";
 import type { AppProps } from "next/app";
 import { useMemo, useState } from "react";
 import {
@@ -15,6 +17,8 @@ import {
 } from "@manahippo/aptos-wallet-adapter";
 import { ModalContext, ModalState } from "../components/ModalContext";
 function WalletSelector({ Component, pageProps }: AppProps) {
+
+  
   const [modalState, setModalState] = useState<ModalState>({
     walletModal: false,
   });
@@ -38,14 +42,18 @@ function WalletSelector({ Component, pageProps }: AppProps) {
   );
 
   return (
-    <WalletProvider wallets={wallets} autoConnect={false}>
-      <ModalContext.Provider value={modals}>
-        <div className="px-8">
-          <NavBar />
-          <Component {...pageProps} className="bg-base-300" />
-        </div>
-      </ModalContext.Provider>
-    </WalletProvider>
+    <div>
+      <WalletProvider wallets={wallets} autoConnect={false}>
+        <ModalContext.Provider value={modals}>
+          <div className="px-8">
+            <NavBar />
+            <Component {...pageProps} className="bg-base-300" />
+          </div>
+        </ModalContext.Provider>
+      </WalletProvider>
+    <Footer />
+    </div>
+    
   );
 }
 
