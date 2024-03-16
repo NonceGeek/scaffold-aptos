@@ -35,6 +35,7 @@ export default function Home() {
           DAPP_ADDRESS,
           new TextEncoder().encode(STATE_SEED)
         );
+        // TODO: need to fix it.
         console.log("resourceAddr:", resourceAddress);
         // const collectionAddress = await provider.getCollectionAddress(
         //   // account.address,
