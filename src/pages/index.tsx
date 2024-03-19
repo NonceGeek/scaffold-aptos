@@ -46,7 +46,7 @@ export default function Home() {
         // console.log(collectionAddress);
         const tokens = await provider.getTokenOwnedFromCollectionAddress(
           account.address.toString(),
-          "0xeec058a336375649ea3a718750f74d94475880bce6d06ec5e32c7ed5dbfbbc8e",
+          "0x7f4b308068670092d911705c86241833a045fbe9a35fa7d94ec7b648c29ea1cf",
           {
             tokenStandard: "v2",
           }
