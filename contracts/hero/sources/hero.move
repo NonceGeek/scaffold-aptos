@@ -12,13 +12,16 @@ module hero::hero {
     use aptos_token_objects::token;
     use aptos_std::string_utils;
 
+    use aptos_token_objects::property_map;
+
     const ENOT_A_HERO: u64 = 1;
     const ENOT_A_WEAPON: u64 = 2;
     const ENOT_A_GEM: u64 = 3;
     const ENOT_CREATOR: u64 = 4;
-    const EINVALID_WEAPON_UNEQUIP: u64 = 5;
-    const EINVALID_GEM_UNEQUIP: u64 = 6;
-    const EINVALID_TYPE: u64 = 7;
+    const ENOT_OWNER: u64 = 5;
+    const EINVALID_WEAPON_UNEQUIP: u64 = 6;
+    const EINVALID_GEM_UNEQUIP: u64 = 7;
+    const EINVALID_TYPE: u64 = 8;
 
     ///  To generate resource account
     const STATE_SEED: vector<u8> = b"hero_signer";
@@ -37,7 +40,8 @@ module hero::hero {
         race: String,
         shield: Option<Object<Shield>>,
         weapon: Option<Object<Weapon>>,
-        mutator_ref: token::MutatorRef,
+        mutator_ref: token::MutatorRef, 
+        property_mutator_ref: property_map::MutatorRef, 
     }
 
     #[resource_group_member(group = aptos_framework::object::ObjectGroup)]
@@ -80,9 +84,13 @@ module hero::hero {
             string::utf8(b"collection uri"),
         );
 
-         move_to(&resource_account, State {
+        move_to(account, State {
             signer_cap
         });
+
+        // move_to(&resource_account, State {
+        //     signer_cap
+        // });
     }
 
     fun create(
@@ -92,8 +100,7 @@ module hero::hero {
         uri: String,
     ): ConstructorRef acquires State {
 
-        let resource_address = get_resource_address();
-        let state = borrow_global_mut<State>(resource_address);
+        let state = borrow_global_mut<State>(@hero);
         let resource_account = account::create_signer_with_capability(&state.signer_cap); 
         token::create_named_token(
             &resource_account,
@@ -116,12 +123,35 @@ module hero::hero {
         uri: String,
     ): Object<Hero> acquires State {
         // generate resource acct
-        let resource_address = get_resource_address();
-        let state = borrow_global_mut<State>(resource_address);
+        // let resource_address = get_resource_address();
+        // ! use this if the owner of cap is resource address.
+        let state = borrow_global_mut<State>(@hero);
         let resource_account = account::create_signer_with_capability(&state.signer_cap);
 
         let constructor_ref = create(&resource_account, description, name, uri);
         let token_signer = object::generate_signer(&constructor_ref);
+
+        // <-- create properties
+        let property_mutator_ref = property_map::generate_mutator_ref(&constructor_ref); 
+        let properties = property_map::prepare_input(vector[], vector[], vector[]);
+
+        property_map::init(&constructor_ref, properties);
+        property_map::add_typed<String>(
+            &property_mutator_ref,
+            string::utf8(b"name"),
+            name,
+        );
+        property_map::add_typed<String>(
+            &property_mutator_ref,
+            string::utf8(b"description"),
+            description,
+        );
+        property_map::add_typed<String>(
+            &property_mutator_ref,
+            string::utf8(b"gender"),
+            gender,
+        );
+        // create properties -->
 
         let hero = Hero {
             armor: option::none(),
@@ -130,10 +160,19 @@ module hero::hero {
             shield: option::none(),
             weapon: option::none(),
             mutator_ref: token::generate_mutator_ref(&constructor_ref),
+            property_mutator_ref,
         };
         move_to(&token_signer, hero);
 
+        // move to creator
+
+        let transfer_ref = object::generate_transfer_ref(&constructor_ref);
+        let creator_address = signer::address_of(creator);
+        object::transfer_with_ref(object::generate_linear_transfer_ref(&transfer_ref), creator_address);
+
         object::address_to_object(signer::address_of(&token_signer))
+
+
     }
 
     public fun create_weapon(
@@ -146,8 +185,7 @@ module hero::hero {
         weight: u64,
     ): Object<Weapon> acquires State {
 
-        let resource_address = get_resource_address();
-        let state = borrow_global_mut<State>(resource_address);
+        let state = borrow_global_mut<State>(@hero);
         let resource_account = account::create_signer_with_capability(&state.signer_cap);
 
         let constructor_ref = create(&resource_account, description, name, uri);
@@ -162,6 +200,11 @@ module hero::hero {
         };
         move_to(&token_signer, weapon);
 
+        // Move token to creator
+        let transfer_ref = object::generate_transfer_ref(&constructor_ref);
+        let creator_address = signer::address_of(creator);
+        object::transfer_with_ref(object::generate_linear_transfer_ref(&transfer_ref), creator_address);
+
         object::address_to_object(signer::address_of(&token_signer))
     }
 
@@ -174,9 +217,7 @@ module hero::hero {
         name: String,
         uri: String,
     ): Object<Gem> acquires State {
-
-        let resource_address = get_resource_address();
-        let state = borrow_global_mut<State>(resource_address);
+        let state = borrow_global_mut<State>(@hero);
         let resource_account = account::create_signer_with_capability(&state.signer_cap);
 
         let constructor_ref = create(&resource_account, description, name, uri);
@@ -189,6 +230,11 @@ module hero::hero {
             magic_attribute,
         };
         move_to(&token_signer, gem);
+
+        // Move token to creator
+        let transfer_ref = object::generate_transfer_ref(&constructor_ref);
+        let creator_address = signer::address_of(creator);
+        object::transfer_with_ref(object::generate_linear_transfer_ref(&transfer_ref), creator_address);
 
         object::address_to_object(signer::address_of(&token_signer))
     }
@@ -283,29 +329,69 @@ module hero::hero {
         create_gem(account, attack_modifier, defense_modifier, description, magic_attribute, name, uri);
     }
 
-
-
-    entry fun set_hero_description(
-        creator: &signer,
+    // TODO: impl this.
+    public entry fun update_hero_description(
+        account: &signer,
         collection: String,
-        name: String,
-        description: String,
-    ) acquires Hero {
+        name: String, 
+        description: String
+    ) acquires Hero, State {
+        // ger resource account
+        let state = borrow_global_mut<State>(@hero);
+        let resource_account = account::create_signer_with_capability(&state.signer_cap);
+
+        // get hero by creator
         let (hero_obj, hero) = get_hero(
-            &signer::address_of(creator),
+            &signer::address_of(&resource_account),
             &collection,
-            &name,
+            &name
         );
-        let creator_addr = token::creator(hero_obj);
-        assert!(creator_addr == signer::address_of(creator), error::permission_denied(ENOT_CREATOR));
-        token::set_description(&hero.mutator_ref, description);
+        // let constructor_ref = create(&resource_account, description, name, uri);
+        // let property_mutator_ref = property_map::generate_mutator_ref(&constructor_ref); 
+        
+        // let creator_addr = token::creator(hero_obj);
+
+        let account_address = signer::address_of(account);
+        
+        // rule: only owner could modify this one.
+        // assert!(object::is_owner(hero_obj, account_address), ENOT_OWNER);
+        // rule 0x02: only cap owner could modify this one.
+        assert!(account_address == @hero, ENOT_CREATOR);
+        // Gets `property_mutator_ref` of hero.
+        let property_mutator_ref = &hero.property_mutator_ref;
+        // Updates the description property.
+        property_map::update_typed(property_mutator_ref, &string::utf8(b"description"), description);
     }
 
     // View functions
     
     #[view]
+    public fun get_resouce_account(account: &signer): address {
+        let (resource_account, resource_signer_cap) = account::create_resource_account(account, STATE_SEED);
+        let resource_address = signer::address_of(&resource_account);
+        resource_address
+    }
+    #[view]
+    public fun get_resouce_account_correctly(): address acquires State{
+
+        // let resource_address = get_resource_address();
+        let state = borrow_global_mut<State>(@hero);
+        let resource_account = account::create_signer_with_capability(&state.signer_cap);
+        let resource_address = signer::address_of(&resource_account);
+        resource_address
+    }
+    #[view]
+    public fun get_collection_address(creator: address, collection: String): address {
+        collection::create_collection_address(&creator, &collection)
+    }
+    #[view]
     public fun get_resource_address(): address {
         account::create_resource_address(&@hero, STATE_SEED)
+    }
+
+    #[view]
+    public fun get_resource_address_by_addr(creator: address): address {
+        account::create_resource_address(&creator, STATE_SEED)
     }
 
     public fun view_hero(creator: address, collection: String, name: String): Hero acquires Hero {
