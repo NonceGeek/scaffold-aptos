@@ -366,6 +366,16 @@ module hero::hero {
     // View functions
     
     #[view]
+    public fun is_whitelisted(account: &signer): bool {
+       true
+    }
+
+        #[view]
+    public fun test_func(): bool {
+       true
+    }
+
+    #[view]
     public fun get_resouce_account(account: &signer): address {
         let (resource_account, resource_signer_cap) = account::create_resource_account(account, STATE_SEED);
         let resource_address = signer::address_of(&resource_account);
